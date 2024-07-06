@@ -1,0 +1,16 @@
+{
+	"name": "Dev Container",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "zsh"
+	},
+	"extensions": [
+		"ms-python.python",
+	],
+    "postCreateCommand": "bash .devcontainer/postbuild.sh",
+	"forwardPorts": [
+		7000
+	]
+}

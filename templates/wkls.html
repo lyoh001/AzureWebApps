@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="../static/css/wkls.css">
+    <link rel="icon" href="../static/icons/wkls.png">
+    <title>WKLS Report Generator</title>
+</head>
+
+<body>
+    <header id="header">
+        <nav class="container">
+            <div class="logo">
+                <h1><span class="highlight">WKLS</span> Report Generator</h1>
+                <p class="subheader">Waverley Korean Language School</p>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#hero">Name</a></li>
+                <li><a href="#form-section">Metrics</a></li>
+                <li><a href="#communicationCards">Communication</a></li>
+                <li><a href="#understandingCards">Understanding</a></li>
+                <li><a href="#comment-section">Comment</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="hero">
+            <div class="hero-content container">
+                <h2>Let's Generate Comprehensive Reports</h2>
+                <p>Effortlessly create detailed student reports with AI assistance.</p>
+                <input type="text" id="studentName" name="studentName" placeholder="Enter student's name">
+                <a href="#form-section" class="cta-button">Get Started</a>
+            </div>
+        </section>
+        <section id="form-section" class="container">
+            <div class="form-card">
+                <h2>Performance Metrics</h2>
+                <div class="performance-metrics">
+                    <div class="metric-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <label for="grade">Grade</label>
+                        <input type="range" id="grade" name="grade" min="0" max="9" step="1" value="0">
+                        <span class="slider-value" id="gradeValue">Prep</span>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <label for="attendance">Attendance</label>
+                        <input type="range" id="attendance" name="attendance" min="0" max="4" step="1" value="2">
+                        <span class="slider-value" id="attendanceValue">Satisfactory</span>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-smile"></i>
+                        <label for="behaviour">Behaviour</label>
+                        <input type="range" id="behaviour" name="behaviour" min="0" max="4" step="1" value="2">
+                        <span class="slider-value" id="behaviourValue">Satisfactory</span>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-tasks"></i>
+                        <label for="effort">Effort</label>
+                        <input type="range" id="effort" name="effort" min="0" max="4" step="1" value="2">
+                        <span class="slider-value" id="effortValue">Satisfactory</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="skills-section" class="container">
+            <div class="form-card">
+                <h2>Skills Assessment</h2>
+                <div class="skill-group">
+                    <div class="skill-cards" id="communicationCards"></div>
+                </div>
+                <div class="skill-group">
+                    <div class="skill-cards" id="understandingCards"></div>
+                </div>
+            </div>
+        </section>
+        <section id="comment-section" class="container">
+            <div class="form-card">
+                <h2>Overall Comment</h2>
+                <textarea id="overallComment"
+                    placeholder="Need help? Click the 'Try Suggestions' button below for AI-generated comments to get you started."></textarea>
+                <span id="characterCount">0/1250</span>
+            </div>
+        </section>
+        <section id="button-section" class="container">
+            <div class="button-group">
+                <button id="brushBtn" class="button">Try Suggestions</button>
+                <button id="generateReportBtn" class="button">Generate Report</button>
+            </div>
+        </section>
+    </main>
+    <footer id="footer">
+        <div class="container">
+            <ul class="social">
+                <li><a href="https://github.com/lyoh001" aria-label="GitHub"><i class="fab fa-github"
+                            aria-hidden="true"></i></a></li>
+                <li><a href="https://linkedin.com/in/lyoh001" aria-label="LinkedIn"><i class="fab fa-linkedin"
+                            aria-hidden="true"></i></a></li>
+                <li><a href="https://lyoh001.com" aria-label="Website"><i class="fa fa-globe"
+                            aria-hidden="true"></i></a>
+                </li>
+                <li><a href="mailto:lyoh001@gmail.com" aria-label="Email"><i class="fa fa-envelope"
+                            aria-hidden="true"></i></a></li>
+            </ul>
+            <p>&copy; 2024 WKLS. All rights reserved.</p>
+        </div>
+    </footer>
+    <div id="loadingSpinner" class="hidden">
+        <div class="spinner">
+            <div class="inner-ring"></div>
+            <div class="outer-ring"></div>
+        </div>
+    </div>
+    <script>
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        function showLoadingSpinner() {
+            loadingSpinner.classList.remove('hidden');
+        }
+
+        function hideLoadingSpinner() {
+            loadingSpinner.classList.add('hidden');
+        }
+
+        const skillOptions = {
+            communication: {
+                0: ["[High] can confidently exchange simple Korean greetings, using appropriate experssion and body language.",
+                    "[High] confidently participates in songs and chants by singing and performing actions.",
+                    "[High] confidently follow simple classroom instructions.",
+                    "[High] can confidently demonstrate their understanding of early literacy skils by labelling, matching, drawing and using gestures to locate and use information.",
+                    "[High] can confidently report on information gathered from friends using simple structures.",
+                    "[High] can confidently participate in shared reading, sharing opinions and responding to questions about imaginative texts.",
+                    "[High] can confidently perform songs, rhymes and action stories using non-verbal forms of expression such as clapping, gestures and facial expressions to support the making of meaning.",
+                    "[High] can confidently use Korean and/or English to name familiar objects and conduct simple conversations.",
+                    "[High] can confidently create bilingual captions in Korean and English for a photographic display to show parents or others about a class event.",
+                    "[High] confidently recognise and use that there are different ways to greet people in Korean.",
+                    "[High] can confidently make simple statements about themselves, including who they are and their personal preferences.",
+                    "[Medium] can satisfactorily exchanges simple Korean greetings, using appropriate expression and body language.",
+                    "[Medium] can satisfactorily participate in songs and chants by singing and performing actions.",
+                    "[Medium] can satisfactorily follow simple classroom instructions.",
+                    "[Medium] can satisfactorily demonstrate their understanding of early literacy skils by labelling, matching, drawing and using gestures to locate and use information.",
+                    "[Medium] can satisfactorily report on information gathered from friends using simple structures.",
+                    "[Medium] can satisfactorily participate in shared reading, sharing opinions and responding to questions about imaginative texts.",
+                    "[Medium] can satisfactorily perform songs, rhymes and action stories using non-verbal forms of expression such as clapping, gestures and facial expressions to support the making of meaning.",
+                    "[Medium] can satisfactorily use Korean and/or English to name familiar objects and conduct simple conversations.",
+                    "[Medium] can satisfactorily create bilingual captions in Korean and English for a photographic display to show parents or others about a class event.",
+                    "[Medium] satisfactorily recognise and use that there are different ways to greet people in Korean.",
+                    "[Medium] can satisfactorily make simple statements about themselves, including who they are and their personal preferences.",
+                    "[Low] is beginning to exchange simple Korean greetings, using some appropriate expression and body language.",
+                    "[Low] is beginning to participate in songs and chants by singing and performing simple actions.",
+                    "[Low] is beginning to follow simple classroom instructions.",
+                    "[Low] is beginning to demonstrate their understanding of early literacy skils by labelling, matching, drawing and using gestures to locate and use information.",
+                    "[Low] is beginning to report on information gathered from friends using simple structures.",
+                    "[Low] is beginning to participate in shared reading, sharing opinions and responding to questions about imaginative texts.",
+                    "[Low] is beginning to perform songs, rhymes and action stories using non-verbal forms of expression such as clapping, gestures and facial expressions to support the making of meaning.",
+                    "[Low] is beginning to use Korean and/or English to name familiar objects and conduct simple conversations.",
+                    "[Low] is beginning to create bilingual captions in Korean and English for a photographic display to show parents or others about a class event.",
+                    "[Low] is beginning to recognise and use that there are different ways to greet people in Korean.",
+                    "[Low] is beginning to make simple statements about themselves, including who they are and their personal preferences.",],
+                3: ["[High] can socialise and build relationship with peers and teachers through the exchange of personal in formation in relation to self, friends and family members with confidence.",
+                    "[High] can competently participate in collaborative tasks and shared experiences such as creating and playing simple language games or dialogues that involve simple negotiation, or preparting and presenting a group display.",
+                    "[High] can competently participate in everyday classroom activities such as responding to teacher's instructions, attracting attention and asking for repetition.",
+                    "[High] can competently identify topics and key points of factual information in short spoken, written, digital and multimodal texts related to familiar contexts, routines and interests.",
+                    "[High] can present information gathered from different types of texts relating to people, objects, places and events with confidence.",
+                    "[High] can confidently participate in shared reading and responding to questions about characters, ideas and events.",
+                    "[High] can competently create and performe alternative versions of stories or action songs, using voice, rhythm and gestures to animate charaters, or using drawing or story maps to creat visual context.",
+                    "[High] can competently translate simple Korean words and expressions for peers, teachers and family, noticing how they have similar or different meanings when translated to English or other languages.",
+                    "[High] can competently create simple bilingual resources for their learning and for the school community.",
+                    "[High] can reflect on each others ways of communicating and their appropriateness in Korean or non-Korean contexts.",
+                    "[High] can competently create own profile using spoken, written or digital forms of expression to identify roles in or memberships of various groups.",
+                    "[Medium] can socialise and build relationship with peers and teachers through the exchange of personal in formation in relation to self, friends and family members with support.",
+                    "[Medium] can satisfactorily participate in collaborative tasks and shared experiences such as creating and playing simple language games or dialogues that involve simple negotiation, or preparting and presenting a group display.",
+                    "[Medium] can satisfactorily participate in everyday classroom activities such as responding to teacher's instructions, attracting attention and asking for repetition.",
+                    "[Medium] can satisfactorily identify topics and key points of factual information in short spoken, written, digital and multimodal texts related to familiar contexts, routines and interests.",
+                    "[Medium] can present information gathered from different types of texts relating to people, objects, places and events with support.",
+                    "[Medium] can satisfactoriy participate in shared reading and responding to questions about characters, ideas and events.",
+                    "[Medium] can satisfactorily create and performe alternative versions of stories or action songs, using voice, rhythm and gestures to animate charaters, or using drawing or story maps to creat visual context.",
+                    "[Medium] can satisfactorily translate simple Korean words and expressions for peers, teachers and family, noticing how they have similar or different meanings when translated to English or other languages.",
+                    "[Medium] can satisfactorily create simple bilingual resources for their learning and for the school community.",
+                    "[Medium] can reflect on each others ways of communicating and their appropriateness in Korean or non-Korean contexts to some degree.",
+                    "[Medium] can satisfactorily create own profile using spoken, written or digital forms of expression to identify roles in or memberships of various groups.",
+                    "[Low] struggles to socialise and build relationship with peers and teachers through the exchange of personal in formation in relation to self, friends and family members.",
+                    "[Low] struggles to participate in collaborative tasks and shared experiences such as creating and playing simple language games or dialogues that involve simple negotiation, or preparting and presenting a group display.",
+                    "[Low] struggles to participate in everyday classroom activities such as responding to teacher's instructions, attracting attention and asking for repetition.",
+                    "[Low] struggles to identify topics and key points of factual information in short spoken, written, digital and multimodal texts related to familiar contexts, routines and interests.",
+                    "[Low] struggles to present information gathered from different types of texts relating to people, objects, places and events.",
+                    "[Low] struggles to participate in shared reading and responding to questions about characters, ideas and events.",
+                    "[Low] struggles to create and performe alternative versions of stories or action songs, using voice, rhythm and gestures to animate charaters, or using drawing or story maps to creat visual context.",
+                    "[Low] struggles to translate simple Korean words and expressions for peers, teachers and family, noticing how they have similar or different meanings when translated to English or other languages.",
+                    "[Low] struggles to create simple bilingual resources for their learning and for the school community.",
+                    "[Low] is learning to recognise on each others ways of communicating and their appropriateness in Korean or non-Korean contexts.",
+                    "[Low] struggles to create own profile using spoken, written or digital forms of expression to identify roles in or memberships of various groups.",],
+                5: ["[High] can describe experiences of everyday life with confidence, sharing experience and feelings in speaking and writing.",
+                    "[High] can collaborate in group tasks and shared experiences with confidence, making collective arrangements.",
+                    "[High] can confidently interact in classroom activities such as creating and following shared class rules and procedures, expressing opinions and asking for permission or clarification.",
+                    "[High] can listen to, view and read texts for specific information drawn from a wide range of sources relating to social and cultural worlds in different times, places and communities, and to different learning areas.",
+                    "[High] can cofidently convey ideas and information in different modes to suit particular audiences.",
+                    "[High] can share responses to a wide range of imaginative texts in different forms by expressing opinions and feelings about key ideas, characters and actions, making connections with own experience or feelings.",
+                    "[High] can compose and perform a variety of creative texts based on a stimulus concept or theme, sharing them face-to-face to present to different audiences, with confidence.",
+                    "[High] can confidently interpret Korean expressions in familiar texts that do not translate easily into English, considering how these expressions reflect aspects of Korean language or culture.",
+                    "[High] can crate bilingual texts for a wide range of multimodal resources for the class, school and community.",
+                    "[High] can recognise the differences in reaction to Korean culture embedded in the language, and reflect on the relationship between language and culture. (e.g., do not making eye contact when talking to older people).",
+                    "[High] can activly participate in traditional Korean culture activities at school to improve own sense of identity.",
+                    "[Medium] can describe experiences of everyday life with support, sharing experience and feelings in speaking and writing.",
+                    "[Medium] can collaborate in group tasks and shared experiences with support, making collective arrangements.",
+                    "[Medium] can interact in classroom activities with support, creating and following shared class rules and procedures, expressing opinions and asking for permission or clarification.",
+                    "[Medium] can listen to, view and read texts for specific information drawn from a basic range of sources relating to social and cultural worlds in different times, places and communities, and to different learning areas.",
+                    "[Medium] can satisfactorily convey ideas and information in different modes to suit particular audiences.",
+                    "[Medium] can share responses to a basic range of imaginative texts in different forms by expressing opinions and feelings about key ideas, characters and actions, making connections with own experience or feelings.",
+                    "[Medium] can compose and perform some creative texts based on a stimulus concept or theme, sharing them face-to-face to present to different audiences, with modelled supoort.",
+                    "[Medium] can interpret Korean expressions in familiar texts that do not translate easily into English, with modelled support, considering how these expressions reflect aspects of Korean language or culture.",
+                    "[Medium] can crate bilingual texts for a basic range of multimodal resources for the class, school and community.",
+                    "[Medium] can recognise the some differences in reaction to Korean culture embedded in the language, and reflect on the relationship between language and culture with some support.",
+                    "[Medium] can participate in some traditional Korean culture activities at school to improve own sense of identity.",
+                    "[Low] can describe experiences of everyday life, but struggle to share experience and feelings in speaking and writing.",
+                    "[Low] can collaborate in group tasks and shared experiences, but struggle to make collective arrangements.",
+                    "[Low] can interact in classroom activities, but struggle to create and follow shared class rules and procedures, express opinions and asking for permission or clarification.",
+                    "[Low] can listen to, view and read texts for specific information drawn from a limited range of sources relating to social and cultural worlds in different times, places and communities, and to different learning areas.",
+                    "[Low] can convey ideas and information in different modes to suit particular audiences with less confident.",
+                    "[Low] can share responses to a limited range of imaginative texts, expressing opinions and feelings about key ideas, characters and actions, making connections with own experience or feelings.",
+                    "[Low] can compose and perform limited creative texts based on a stimulus concept or theme, but struggle to  share them face-to-face to present to different audiences, with less confidence.",
+                    "[Low] struggles to interpret Korean expressions in familiar texts that do not translate easily into English, considering how these expressions reflect aspects of Korean language or culture.",
+                    "[Low] can crate bilingual texts for a limited range of multimodal resources for the class, school and community.",
+                    "[Low] is learning to recognise the differences in reaction to Korean culture embedded in the language, and reflect on the relationship between language and culture.",
+                    "[Low] can participate in the limited traditional Korean culture activities at school to improve own sense of identity.",
+                ]
+            },
+            understanding: {
+                0: ["[High] can confidently sing the sounds of letters and syllable blocks of hangeul.",
+                    "[High] confidently identify -요 at the end of a sentence as indicating some polite meaning.",
+                    "[High] can confidently use simple vacabulary to identify familiar objects and to describe simple actions or states.",
+                    "[High] can confidently listen to and view different types of simple texts in Korean including digital or online texts.",
+                    "[High] confidently use different greetings and expressions in different social settings where people of different ages and/or different degrees of familarity are involved.",
+                    "[High] confidently identify Korean words use in English contexts.",
+                    "[High] confidently understand that the world contains many different languages spoken by many different communities of spearkers.",
+                    "[High] confidently identify differences and similarities between their own and others languages and cultures.",
+                    "[Medium] can satisfactorily sing the sounds of letters and syllable blocks of hangeul.",
+                    "[Medium] satisfactorily identify -요 at the end of a sentence as indicating some polite meaning.",
+                    "[Medium] can satisfactorily use simple vacabulary to identify familiar objects and to describe simple actions or states.",
+                    "[Medium] can satisfactorily listen to and view different types of simple texts in Korean including digital or online texts.",
+                    "[Medium] satisfactorily use different greetings and expressions in different social settings where people of different ages and/or different degrees of familarity are involved.",
+                    "[Medium] satiscfactorily identify Korean words use in English contexts.",
+                    "[Medium] satisfactorily understand that the world contains many different languages spoken by many different communities of spearkers.",
+                    "[Medium] satisfactorily identify differences and similarities between their own and others languages and cultures.",
+                    "[Low] is beginning to sing the sounds of letters and syllable blocks of hangeul.",
+                    "[Low] is beginning to identify -요 at the end of a sentence as indicating some polite meaning.",
+                    "[Low] is beginning to use simple vacabulary to identify familiar objects and to describe simple actions or states.",
+                    "[Low] is beginning to listen to and view different types of simple texts in Korean including digital or online texts.",
+                    "[Low] is beginning to use different greetings and expressions in different social settings where people of different ages and/or different degrees of familarity are involved.",
+                    "[Low] is beginning to identify Korean words use in English contexts.",
+                    "[Low] is beginning to understand that the world contains many different languages spoken by many different communities of spearkers.",
+                    "[Low] is beginning to identify differences and similarities between their own and others languages and cultures.",
+                ],
+                3: ["[High] can competently recognise characteristics of Korean pronunciation and intonation patterns, the alphabetical nature of Hangeul, and the structural features of individual syllable blocks including 받침.",
+                    "[High] can competently understand and use key grammatical forms and structures such as basic pronouns and case markers and the polite verb ending –어/아요 in own simple language production, and recognise politeness embedded in humble or honorific forms such as 저 and –(으)세요.",
+                    "[High] can competently recognise and use vocabulary to describe familiar people, objects and places, and basic routines, including Sino- and pure Korean number words with basic counters, words for colours, names of sports.",
+                    "[High] can recognise differences in language features and text structures in different types of texts, including those in digital form, used in familiar contexts.",
+                    "[High] can competently build understanding of the variability of language use in Korean, for example, in relation to the age and relationship of participants.",
+                    "[High] can understand that languages change over time and influence each other through contact and cultural exchanges.",
+                    "[High] can reflect on and share their experience when using Korean and when using own language/s, recognising cultural elements that may cause different feelings.",
+                    "[High] can competently compare and reflect on different ways of using language in everyday situations in Korean, Australian and other cultures, sharing ideas about possible reasons for the differences and variations.",
+                    "[Medium] can satisfactorily recognise characteristics of Korean pronunciation and intonation patterns, the alphabetical nature of Hangeul, and the structural features of individual syllable blocks including 받침.",
+                    "[Medium] can satisfactorily understand and use key grammatical forms and structures such as basic pronouns and case markers and the polite verb ending –어/아요 in own simple language production, and recognise politeness embedded in humble or honorific forms such as 저 and –(으)세요.",
+                    "[Medium] can satisfactorily recognise and use vocabulary to describe familiar people, objects and places, and basic routines, including Sino- and pure Korean number words with basic counters, words for colours, names of sports.",
+                    "[Medium] can recognise differences in language features and text structures in different types of texts, including those in digital form, used in familiar contexts to some degree.",
+                    "[Medium] can satisfactorily build understanding of the variability of language use in Korean, for example, in relation to the age and relationship of participants.",
+                    "[Medium] can understand that languages change over time and influence each other through contact and cultural exchanges to some degree.",
+                    "[Medium] can reflect on and share their experience when using Korean and when using own language/s, recognising cultural elements that may cause different feelings to some degree.",
+                    "[Medium] can satisfactorily compare and reflect on different ways of using language in everyday situations in Korean, Australian and other cultures, sharing ideas about possible reasons for the differences and variations.",
+                    "[Low] struggles to recognise characteristics of Korean pronunciation and intonation patterns, the alphabetical nature of Hangeul, and the structural features of individual syllable blocks including 받침.",
+                    "[Low] struggles to understand and use key grammatical forms and structures such as basic pronouns and case markers and the polite verb ending –어/아요 in own simple language production, and recognise politeness embedded in humble or honorific forms such as 저 and –(으)세요.",
+                    "[Low] struggles to recognise and use vocabulary to describe familiar people, objects and places, and basic routines, including Sino- and pure Korean number words with basic counters, words for colours, names of sports.",
+                    "[Low] struggles to recognise differences in language features and text structures in different types of texts, including those in digital form, used in familiar contexts.",
+                    "[Low] struggles to build understanding of the variability of language use in Korean, for example, in relation to the age and relationship of participants.",
+                    "[Low] struggles to understand that languages change over time and influence each other through contact and cultural exchanges.",
+                    "[Low] struggles to reflect on and share their experience when using Korean and when using own language/s, recognising cultural elements that may cause different feelings.",
+                    "[Low] struggles to compare and reflect on different ways of using language in everyday situations in Korean, Australian and other cultures, sharing ideas about possible reasons for the differences and variations.",
+                ],
+                5: ["[High] can competently understand the relationships between letters and sounds, and between intonation and punctuation/printing conventions in Korean, applying this understanding to own speech, reading and writing.",
+                    "[High] can competently use aspects of the Korean grammatical system such as verb conjugations, suffixes, some particles, basic conjunctions and the honorific system.",
+                    "[High] can competently identify and use appropriate terms and expressions, such as honorific and qualifying words and counters for specific purposes and contexts.",
+                    "[High] can competently identify and use distinctive features of different types of spoken and written texts in Korean.",
+                    "[High] can recognise a wide range of variables such as age and personal and social relationships impact on language use in Korean.",
+                    "[High] can confidently recognise the dynamic nature of languages and cultures, and the changing and influential relationships that exist between languages.",
+                    "[High] can understand how language can be used to influence people, ideas and the understanding of cultures and share with other friends.",
+                    "[High] recognises the interrelationship between language and culture, and understands the significance of social conventions and cultural concepts differ across different language groups.",
+                    "[Medium] can understand the relationships between letters and sounds, and between intonation and punctuation/printing conventions in Korean to some degree, applying this understanding to own speech, reading and writing.",
+                    "[Medium] can use aspects of the Korean grammatical system such as verb conjugations, suffixes, some particles, basic conjunctions and the honorific system with some support.",
+                    "[Medium] can identify and use appropriate terms and expressions, such as honorific and qualifying words and counters for specific purposes and contexts with some support.",
+                    "[Medium] can identify and use distinctive features of different types of spoken and written texts in Korean with support.",
+                    "[Medium] can recognise a basic range of variables such as age and personal and social relationships impact on language use in Korean.",
+                    "[Medium] can recognise the dynamic nature of languages and cultures, and the changing and influential relationships that exist between languages to some degree.",
+                    "[Medium] can understand how language can be used to influence people, ideas and the understanding of cultures and share with other friends to some degree.",
+                    "[Medium] recognises the interrelationship between language and culture to some degree, and understands the significance of social conventions and cultural concepts differ across different language groups.",
+                    "[Low] is learning to the relationships between letters and sounds, and between intonation and punctuation/printing conventions in Korean.",
+                    "[Low] is learning the Korean grammatical system such as verb conjugations, suffixes, some particles, basic conjunctions and the honorific system.",
+                    "[Low] struggles to identify and use appropriate terms and expressions, such as honorific and qualifying words and counters for specific purposes and contexts.",
+                    "[Low] struggles to identify and use distinctive features of different types of spoken and written texts in Korean.",
+                    "[Low] can recognise a limited range of variables such as age and personal and social relationships impact on language use in Korean.",
+                    "[Low] is learning to recognise the dynamic nature of languages and cultures, and the changing and influential relationships that exist between languages.",
+                    "[Low] is learning to understand how language can be used to influence people, ideas and the understanding of cultures and share with other friends.",
+                    "[Low] has a limited understanding of the  interrelationship between language and culture to some degree, and understands the significance of social conventions and cultural concepts differ across different language groups.",
+                ]
+            }
+        };
+
+        function createSkillCards(containerId, options, maxAllowed) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            let selectedCards = 0;
+
+            options.forEach((option, index) => {
+                const card = document.createElement('div');
+                card.className = 'skill-card';
+                card.textContent = option.replace(/\[.*?\]/, '').trim();
+
+                if (option.includes('[High]')) {
+                    card.classList.add('high');
+                } else if (option.includes('[Medium]')) {
+                    card.classList.add('medium');
+                } else if (option.includes('[Low]')) {
+                    card.classList.add('low');
+                }
+
+                const footer = document.createElement('div');
+                footer.className = 'skill-card-footer';
+                footer.textContent = containerId.includes('communication') ? 'Communication' : 'Understanding';
+                card.appendChild(footer);
+
+                const remainingSelection = document.createElement('div');
+                remainingSelection.className = 'remaining-selection';
+                remainingSelection.textContent = maxAllowed - selectedCards;
+                card.appendChild(remainingSelection);
+
+                card.addEventListener('click', () => {
+                    if (card.classList.contains('selected')) {
+                        card.classList.remove('selected');
+                        selectedCards--;
+                    } else if (selectedCards < maxAllowed) {
+                        card.classList.add('selected');
+                        selectedCards++;
+                    }
+                    updateRemainingSelections(containerId, maxAllowed - selectedCards);
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        function updateRemainingSelections(containerId, remaining) {
+            const cards = document.querySelectorAll(`#${containerId} .skill-card`);
+            cards.forEach(card => {
+                const remainingSelection = card.querySelector('.remaining-selection');
+                remainingSelection.textContent = remaining;
+            });
+        }
+
+        const gradeSlider = document.getElementById('grade');
+        const gradeValueSpan = document.getElementById('gradeValue');
+
+        function updateSkillCards() {
+            const selectedGrade = parseInt(gradeSlider.value);
+            let gradeGroup = 0;
+            if (selectedGrade >= 3 && selectedGrade <= 4) {
+                gradeGroup = 3;
+            } else if (selectedGrade >= 5) {
+                gradeGroup = 5;
+            }
+            createSkillCards('communicationCards', skillOptions.communication[gradeGroup], 5);
+            createSkillCards('understandingCards', skillOptions.understanding[gradeGroup], 5);
+        }
+
+        gradeSlider.addEventListener('input', () => {
+            if (gradeSlider.value === '0') {
+                gradeValueSpan.textContent = 'Prep';
+            } else {
+                gradeValueSpan.textContent = 'Year ' + gradeSlider.value;
+            }
+            updateSkillCards();
+        });
+
+        const sliders = ['attendance', 'effort', 'behaviour'];
+        sliders.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            const valueSpan = document.getElementById(sliderId + 'Value');
+            slider.addEventListener('input', () => {
+                const values = ['Very Low', 'Needs Attention', 'Satisfactory', 'High', 'Excellent'];
+                valueSpan.textContent = values[slider.value];
+            });
+        });
+
+        document.getElementById('brushBtn').addEventListener('click', function (event) {
+            showLoadingSpinner();
+            const studentName = document.getElementById('studentName');
+            const grade = document.getElementById('grade');
+            const attendance = document.getElementById('attendance');
+            const effort = document.getElementById('effort');
+            const behaviour = document.getElementById('behaviour');
+            const overallComment = document.getElementById('overallComment');
+            const communicationCards = document.querySelectorAll('#communicationCards .skill-card.selected');
+            const understandingCards = document.querySelectorAll('#understandingCards .skill-card.selected');
+
+            function getSelectedCardValues(cards) {
+                const selectedValues = [];
+                cards.forEach(card => {
+                    selectedValues.push('[] ' + card.textContent.trim());
+                });
+                return selectedValues;
+            }
+
+            const data = {
+                studentName: studentName.value,
+                grade: grade.value,
+                communicationSkills: getSelectedCardValues(communicationCards),
+                understandingSkills: getSelectedCardValues(understandingCards),
+                attendance: attendance.value,
+                effort: effort.value,
+                behaviour: behaviour.value
+            };
+
+            fetch('/mlwklsbrush', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(responseData => {
+                    overallComment.value = responseData.updatedComment;
+                    const characterCount = overallComment.value.length;
+                    characterCountSpan.textContent = `${characterCount}/${maxCharacters}`;
+                })
+                .catch(error => {
+                    console.error('Error making API call:', error);
+                })
+                .finally(() => {
+                    hideLoadingSpinner();
+                });
+        });
+
+        document.getElementById('generateReportBtn').addEventListener('click', function (event) {
+            showLoadingSpinner();
+            const studentName = document.getElementById('studentName');
+            const grade = document.getElementById('grade');
+            const attendance = document.getElementById('attendance');
+            const effort = document.getElementById('effort');
+            const behaviour = document.getElementById('behaviour');
+            const overallComment = document.getElementById('overallComment');
+            const communicationCards = document.querySelectorAll('#communicationCards .skill-card.selected');
+            const understandingCards = document.querySelectorAll('#understandingCards .skill-card.selected');
+
+            function getSelectedCardValues(cards) {
+                const selectedValues = [];
+                cards.forEach(card => {
+                    const textContent = card.textContent.replace(/Communication\d*|Understanding\d*/, '').trim();
+                    selectedValues.push('[] ' + textContent);
+                });
+                return selectedValues;
+            }
+
+            const data = {
+                studentName: studentName.value,
+                grade: grade.value,
+                communicationSkills: getSelectedCardValues(communicationCards),
+                understandingSkills: getSelectedCardValues(understandingCards),
+                attendance: attendance.value,
+                effort: effort.value,
+                behaviour: behaviour.value,
+                overallComment: overallComment.value
+            };
+
+            fetch('/mlwklsgenerate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(blob => {
+                    const studentName = document.getElementById('studentName').value.replace(/[^a-zA-Z0-9]/g, '_');
+                    const blobWithStudentName = new Blob([blob], { type: 'application/pdf' });
+                    const a = document.createElement('a');
+                    a.href = window.URL.createObjectURL(blobWithStudentName);
+                    a.download = `${studentName}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(a.href);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('Error generating report:', error);
+                })
+                .finally(() => {
+                    hideLoadingSpinner();
+                });
+        });
+
+        const maxCharacters = 1250;
+        const overallCommentTextarea = document.getElementById('overallComment');
+        const characterCountSpan = document.getElementById('characterCount');
+
+        overallCommentTextarea.addEventListener('input', function () {
+            const characterCount = overallCommentTextarea.value.length;
+            characterCountSpan.textContent = `${characterCount}/${maxCharacters}`;
+            if (characterCount > maxCharacters) {
+                overallCommentTextarea.value = overallCommentTextarea.value.substring(0, maxCharacters);
+                characterCountSpan.textContent = `${maxCharacters}/${maxCharacters}`;
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            hideLoadingSpinner();
+            updateSkillCards();
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            const header = document.querySelector('#header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    navMenu.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

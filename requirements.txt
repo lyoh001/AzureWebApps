@@ -1,0 +1,16 @@
+aiohttp
+fastapi
+gunicorn
+jinja2
+langchain
+langchain-openai
+numpy
+opencv-python-headless
+pandas
+PyPDF2
+python-dotenv
+reportlab
+requests
+scikit-learn==1.0.2
+tflite-runtime
+uvicorn

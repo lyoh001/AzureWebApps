@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+   <link rel="stylesheet" href="../static/css/styles.css">
+   <link rel="icon" href="../static/icons/main.png">
+   <title>John Yohan Lee's Portfolio</title>
+</head>
+
+<body>
+   <header id="header">
+      <nav class="container">
+         <div class="logo">
+            <h1><span class="highlight">JOHN</span> YOHAN LEE</h1>
+            <p class="subheader">Machine Learning & DevOps Engineer</p>
+         </div>
+         <button class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+         </button>
+         <ul class="nav-menu">
+            <li><a href="#hero">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#footer">Contact</a></li>
+         </ul>
+      </nav>
+   </header>
+   <main>
+      <section id="hero">
+         <div class="video-background">
+            <video autoplay loop muted playsinline>
+               <source src="/videos/background-video.mp4" type="video/mp4">
+               Your browser does not support the video tag.
+            </video>
+         </div>
+         <div class="hero-content container">
+            <h2>Turning Vision into Innovation:</h2>
+            <p>Expert in ML & DevOps</p>
+            <p>Driving Efficiency with Advanced Technologies</p>
+            <a href="#portfolio" class="cta-button">View My Work</a>
+         </div>
+      </section>
+      <section id="skills">
+         <h2>Skills & Expertise</h2>
+         <div class="skills-grid">
+            <div class="skill-card">
+               <i class="fas fa-brain" aria-hidden="true"></i>
+               <h3>Machine Learning</h3>
+               <p>GenAI, Deep Learning, NLP</p>
+            </div>
+            <div class="skill-card">
+               <i class="fas fa-server" aria-hidden="true"></i>
+               <h3>DevOps</h3>
+               <p>Automation, CI/CD, Cloud Infrastructure</p>
+            </div>
+            <div class="skill-card">
+               <i class="fas fa-code" aria-hidden="true"></i>
+               <h3>Programming</h3>
+               <p>Python, IaC, SQL</p>
+            </div>
+            <div class="skill-card">
+               <i class="fas fa-cloud" aria-hidden="true"></i>
+               <h3>Cloud Platforms</h3>
+               <p>AWS, Azure</p>
+            </div>
+         </div>
+      </section>
+      <section id="portfolio" class="container">
+         <div class="button-group">
+            <button onclick="togglePortfolio('ml')" class="button active">ML Portfolio</button>
+            <button onclick="togglePortfolio('devops')" class="button">DevOps Portfolio</button>
+         </div>
+         <div id="mlPortfolio" class="portfolio-content">
+            <div class="portfolio-item">
+               <h3>LLM: Enhancing Knowledge Base Bots with Fine-Tuned LLM, Retrieval
+                  Augmentation, and AI Agent Integration
+               </h3>
+               <p>
+                  Led an innovative project to create a bespoke knowledge management bot using
+                  "Llama-3 70B". Addressed parametric knowledge restrictions by fine-tuning.
+                  Incorporated Retrieval Augmented Generation and integrated an AI agent that could trigger existing
+                  automation workflows through natural language and access
+                  real-time data, all safeguarded by robust Guardrails. This project marked a
+                  significant advancement in AI for specialized knowledge management.
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="Python" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="Docker" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pytorch-161B22?logo=pytorch" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/spacy-161B22?logo=spacy" alt="" />
+                  <img src="https://img.shields.io/badge/twitter-161B22?logo=twitter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazonaws" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/ypiDyAuOo-k?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>LLM: AI-Powered Online Report Generator</h3>
+               <p>
+                  Developed an AI-driven online report generation tool aimed at assisting the creation of student annual
+                  report cards for educators. Designed an intuitive web interface
+                  that enables seamless generation of detailed reports
+                  through a simple selection process. Leveraged
+                  advanced generative AI to personalize and expedite documentation, enhancing educational workflows and
+                  productivity. Demonstrated expertise in AI, web
+                  development, and UI design by integrating cutting-edge
+                  technology to improve educational outcomes.
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pytorch-161B22?logo=pytorch" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/spacy-161B22?logo=spacy" alt="" />
+                  <img src="https://img.shields.io/badge/twitter-161B22?logo=twitter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazonaws" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/aQ3fJ6BaImE?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>LLM: Multi-Cloud AI Playground with a Full-Stack
+                  Integration
+               </h3>
+               <p>
+                  Developed an innovative, multi-cloud AI web application leveraging GPT-3.5, GPT-4, Claude-3, Cohere,
+                  LLaMA-3, Mistral, and DALL-E-3, showcased at the Cenitex Innovation Hub. Built with Azure WebApps and
+                  AWS SageMaker, the app integrates Large Language Models (LLMs) within a sophisticated multi-cloud
+                  framework. This project sets new standards for AI-driven innovation by creating a scalable,
+                  high-availability AI ecosystem that operates seamlessly across AWS, Azure, and local infrastructures.
+                  The application delivers a rich, multi-model AI experience, ensuring rapid user engagement and
+                  exceptional system responsiveness.
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pytorch-161B22?logo=pytorch" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/spacy-161B22?logo=spacy" alt="" />
+                  <img src="https://img.shields.io/badge/twitter-161B22?logo=twitter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazonaws" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/KjaqoMD_pPE?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>LLM: AI Chatbot powered by a Large Language Model</h3>
+               <p>
+                  Created a chatbot that responds to user queries using natural language.
+                  Used a state-of-the-art language model, Falcon-7B, fine-tuned on a
+                  custom Q&A dataset with QLoRA, specifically Chatbot customer support
+                  FAQs from an E-commerce website. Compared the performance of the
+                  untrained and trained models by evaluating their responses to various
+                  prompts. Deployed the model to a secure AWS Sagemaker for real-time
+                  inference requests. Built a web app using Azure Function and Static Web
+                  apps to showcase the chatbot functionality. Uploaded the trained model
+                  to the Hugging Face Hub for later consumption.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/DLFalcon"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pytorch-161B22?logo=pytorch" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/spacy-161B22?logo=spacy" alt="" />
+                  <img src="https://img.shields.io/badge/twitter-161B22?logo=twitter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazonaws" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/-vD_kHpCwRY?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>LLM: Disaster Detection and Response with Large Language Models</h3>
+               <p>
+                  Built a fast and accurate NLP model for disaster tweet classification
+                  and response generation. The data was cleaned and preprocessed using
+                  Regex, NLTK, Gensim, and SpaCy. The data was then visualised to discover
+                  patterns and trends. The model was trained on 284k disaster-related
+                  tweets and achieved over 90% accuracy. The model was deployed to AWS
+                  Sagemaker inference endpoint for production-ready machine learning
+                  applications. Falcon, Open llama, Bloom, and GPT-NeoX were explored and
+                  fine-tuned for disaster response generation.
+               </p>
+               <p>
+                  <a
+                     href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mldisastertweets/notebook/notebook_distilbert.ipynb"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pytorch-161B22?logo=pytorch" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/spacy-161B22?logo=spacy" alt="" />
+                  <img src="https://img.shields.io/badge/twitter-161B22?logo=twitter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazonaws" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/nlp.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Stable Diffusion: AI-Generated Image Web Application</h3>
+               <p>
+                  Conceptualised, developed, and implemented a dynamic web application
+                  dedicated to generating AI-generated images. Created an intuitive and
+                  user-friendly interface that allows users to effortlessly generate
+                  unique images through prompt inputs.
+               </p>
+               <p>
+                  <a
+                     href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlstablediffusion/notebook/notebook.ipynb"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/LQIE_r-WgI8?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>RNN: A Key to Unlocking Cloud Cost Analysis and Optimization using Machine
+                  Learning
+               </h3>
+               <p>
+                  Conducted an in-depth analysis of the cloud consumption patterns by
+                  building a Power BI dashboard and deployed ML model to the cloud for
+                  future billing prediction using a Recurrent Neural Network (LSTM),
+                  TensorFlow, Scikit Learn, Pandas, NumPy, Matplotlib and Seaborn. This
+                  resulted in cost savings of over $500k per year.
+               </p>
+               <p>
+                  <a
+                     href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlcloudaudit/notebook/notebook.ipynb"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/lstm.png" class="section-image">
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/XfcVUTvRDS4?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>CNN: Accurate COVID-19 Detection using Machine Learning</h3>
+               <p>
+                  Developed an application that utilises a Convolutional Neural Network to
+                  classify X-ray images for Covid infection detection. Increased the
+                  sample size using data augmentation and achieved a 96% accuracy using
+                  MobileNet (transfer learning). The application has been deployed to the
+                  cloud, enabling efficient diagnosis of Covid infections by doctors.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/DLCovid19"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/opencv-161B22?logo=opencv" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/cnn.png" class="section-image">
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/tq-5nzUaQFA?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>MLOps: Machine Learning for Maternal Risk</h3>
+               <p>
+                  Built an Artificial Neural Network classification model to identify
+                  maternal risks, incorporating Exploratory Data Analysis (EDA), Feature
+                  Engineering, Power BI, Machine Learning (ML) and Deep Learning (DL)
+                  training. The model was deployed to the cloud via a CI/CD pipeline. This
+                  solution helped to identify and manage potential health risks during
+                  pregnancy, leading to improved outcomes for both the mother and baby.
+               </p>
+               <p>
+                  <a
+                     href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlmaternalmortality/notebook/notebook.ipynb"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/swa.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>ETL: An Analysis of Azure IaaS for Savings</h3>
+               <p>
+                  Designed and developed Azure ETL data pipeline that extracts data daily
+                  from various sources, including SQL and REST API. The solution also
+                  performs data transformation using Azure Data Factory, Databricks and
+                  Data Lake. This implementation resulted in efficiency gains for valuable
+                  licensing insights and reduced manual efforts by 10 hours per week.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureVMAudit"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/databricks-161B22?logo=databricks" alt="" />
+                  <img src="https://img.shields.io/badge/microsoft%20sql%20server-161B22?logo=microsoft%20sql%20server"
+                     alt="" />
+                  <img src="https://img.shields.io/badge/mysql-161B22?logo=mysql" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/etl.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>ANN: Unveiling Telecommunication Hidden Insights with Machine Learning</h3>
+               <p>
+                  Participated in a Power BI competition hosted by Codebasics and have
+                  built a complete end-to-end project featuring EDA, Feature Engineering,
+                  Power BI, Machine Learning Model Training, and Cloud Deployment via a
+                  CI/CD pipeline. This enables businesses to optimize their revenue
+                  streams and stay ahead of the market competition. Utilized SQL to
+                  extract data from six different related tables from sales databases
+                  using JOIN. Transformed and filtered data using aggregating and
+                  filtering functions to improve reporting process. Loaded and visualized
+                  data with Python to identify key business intelligences that can improve
+                  sales performance.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mltelecom/notebook/notebook.ipynb"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/ann.png" class="section-image">
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/asOnUFHlvZw?start=554" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>Power BI: Cloud Security Dashboard</h3>
+               <p>
+                  Implemented a new Power BI dashboard to help identify and track cloud
+                  security vulnerabilities. The data was collected via a REST API, and the
+                  dashboard was embedded into Azure Web Apps and deployed using a GitHub
+                  Actions CI/CD pipeline. This dashboard provides a visual representation
+                  of the data, allowing the team to quickly identify areas of concern.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureSecurityScore"><b>View
+                        GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+            </div>
+         </div>
+         <div id="devopsPortfolio" class="portfolio-content hidden">
+            <div class="portfolio-item">
+               <h3>A Key to Unlocking Cloud Cost Analysis and Optimization using Machine
+                  Learning
+               </h3>
+               <p>
+                  Designed and developed an Azure ETL data pipeline that extracts data
+                  daily from various sources, performs transformations using Azure Data
+                  Factory, Databricks, and Data Lake. This implementation resulted in
+                  efficiency gains for valuable licensing insights and reduced manual
+                  efforts by 10 hours per week. Furthermore, trained and deployed a
+                  cost-saving ML model using LSTM, TensorFlow, Scikit Learn, Pandas,
+                  NumPy, Matplotlib, and Seaborn, saving over $500k per year.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureVMAudit"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/tensorflow-161B22?logo=tensorflow" alt="" />
+                  <img src="https://img.shields.io/badge/sklearn-161B22?logo=scikit-learn" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/numpy-161B22?logo=numpy" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/databricks-161B22?logo=databricks" alt="" />
+                  <img src="https://img.shields.io/badge/microsoft%20sql%20server-161B22?logo=microsoft%20sql%20server"
+                     alt="" />
+                  <img src="https://img.shields.io/badge/mysql-161B22?logo=mysql" alt="" />
+                  <img src="https://img.shields.io/badge/powerbi-161B22?logo=powerbi" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azureetl.png" class="section-image">
+               <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/XfcVUTvRDS4?start=0" frameborder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowfullscreen></iframe>
+               </div>
+            </div>
+            <div class="portfolio-item">
+               <h3>Analyzing and Streamlining LMS Automation in Azure</h3>
+               <p>
+                  Resolved business challenges by identifying and addressing root causes
+                  of data transfer failures. Implemented a cloud-native solution using
+                  microservice and serverless architecture, which improved efficiency and
+                  effectiveness of the LMS, reduced delays and errors by 80%, and provided
+                  valuable insights.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureLMS"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/jupyter-161B22?logo=jupyter" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azurelms.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Azure Onboarding System with a New Landing Zone</h3>
+               <p>
+                  Designed and developed an automated onboarding workflow for Azure
+                  subscriptions, policies, and billing system integration, replacing the
+                  manual approach. Leveraged Infrastructure as Code and Azure Function
+                  Automation to streamline the process. Achieved significant improvements
+                  in the onboarding process, including a 90% reduction in onboarding time
+                  and a 99% reduction in errors. These enhancements led to improved
+                  customer satisfaction and reduced operational costs by 10%.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureOnboard"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azureonboard.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Automated AWS Onboarding System with SNS Notifications</h3>
+               <p>
+                  Designed and developed a robust and scalable automated onboarding system
+                  for new AWS accounts, leveraging various AWS services to streamline the
+                  process and enhance efficiency. The system incorporates AWS CDK for
+                  rapid deployment, AWS Lambda for seamless integration and business logic
+                  execution, DynamoDB for account updates, S3 for analysis reports, and
+                  SNS for user notifications. The project achieved remarkable results,
+                  including a 95% reduction in onboarding time and a 99% reduction in
+                  errors compared to the previous manual approach.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AWSOnboard"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/aws-161B22?logo=amazon-aws" alt="" />
+                  <img src="https://img.shields.io/badge/aws_lambda-161B22?logo=awslambda" alt="" />
+                  <img src="https://img.shields.io/badge/aws_apigateway-161B22?logo=amazonapigateway" alt="" />
+                  <img src="https://img.shields.io/badge/aws_dynamodb-161B22?logo=amazondynamodb" alt="" />
+                  <img src="https://img.shields.io/badge/aws_s3-161B22?logo=amazons3" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/awsonboard.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Monitoring and Alerting in Azure</h3>
+               <p>
+                  Designed and developed an automated real-time resource monitoring
+                  workflow for over 100 Azure subscriptions, replacing the manual
+                  approach. Leveraged Azure Monitor, Azure Automation, Azure Log
+                  Analytics, and Azure Alerts to streamline the process. Achieved
+                  significant improvements in resource monitoring, including a 90%
+                  reduction in issue identification and resolution time, as well as a 95%
+                  reduction in errors. These enhancements led to improved resource
+                  utilization and reduced operational costs by 10%.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureMonitor"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azuremonitor.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Streamlining RBAC Security Management in Azure</h3>
+               <p>
+                  Designed and developed an automated RBAC management workflow for
+                  extracting Role-Based Access Control (RBAC) reports across over 100
+                  Azure subscriptions, replacing the manual approach. Leveraged Azure
+                  Automation and built-in RBAC functionality to streamline the process.
+                  Achieved significant improvements in RBAC management, including a 90%
+                  reduction in report extraction time and a 95% reduction in errors. These
+                  enhancements resulted in improved security, compliance, and reduced
+                  operational costs by 5%.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureRBAC"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azurerbac.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>An Analysis of Azure Monthly Billing and Strategies for Savings</h3>
+               <p>
+                  Resolved challenges related to generating timely and accurate customer
+                  invoices by implementing a fully automated Azure monthly billing system.
+                  Leveraged Python, Pandas, Seaborn, and Azure Functions to develop the
+                  solution. Achieved significant cost savings, improved customer
+                  satisfaction by 90%, and reduced manual efforts through the
+                  implementation of the automated Azure billing system. The solution also
+                  provided valuable insights for identifying and addressing any
+                  data-related issues.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureBill"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azurebill.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Streamlining Collaboration with GoFex Sharepoint Integration on Azure</h3>
+               <p>
+                  Assisted a business in resolving challenges related to manual file
+                  uploads to SharePoint. Designed and implemented an on-prem to SharePoint
+                  integration with a fully automated workflow, including triggers,
+                  schedules, error handling, and reporting mechanisms. Significantly
+                  improved efficiency and effectiveness of the file management system,
+                  reducing manual effort by 5 hours per week while enhancing accuracy.
+                  Generated valuable insights into the file management process.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureGoFex"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/python-161B22?logo=python" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/pandas-161B22?logo=pandas" alt="" />
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/azure_functions-161B22?logo=azure-functions" alt="" />
+                  <img src="https://img.shields.io/badge/microsoftsharepoint-161B22?logo=microsoftsharepoint" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+               <img src="../static/images/azuregofex.png" class="section-image">
+            </div>
+            <div class="portfolio-item">
+               <h3>Infrastructure as Code</h3>
+               <p>
+                  Accelerated a rapid deployment to the cloud using Infrastructure as Code
+                  with Github actions CICD pipeline.
+               </p>
+               <p>
+                  <a href="https://github.com/lyoh001/AzureBicep"><b>View GitHub</b></a>
+               </p>
+               <div class="tech-stack">
+                  <img src="https://img.shields.io/badge/azure-161B22?logo=microsoftazure" alt="" />
+                  <img src="https://img.shields.io/badge/docker-161B22?logo=docker" alt="" />
+                  <img src="https://img.shields.io/badge/vscode-161B22?logo=visualstudiocode" alt="" />
+                  <img src="https://img.shields.io/badge/github-161B22?logo=github" alt="" />
+                  <img src="https://img.shields.io/badge/github_actions-161B22?logo=githubactions" alt="" />
+               </div>
+            </div>
+         </div>
+      </section>
+   </main>
+   <footer id="footer">
+      <div class="container">
+         <ul class="social">
+            <li><a href="https://github.com/lyoh001" aria-label="GitHub"><i class="fab fa-github"
+                     aria-hidden="true"></i></a></li>
+            <li><a href="https://linkedin.com/in/lyoh001" aria-label="LinkedIn"><i class="fab fa-linkedin"
+                     aria-hidden="true"></i></a></li>
+            <li><a href="https://lyoh001.com" aria-label="Website"><i class="fa fa-globe" aria-hidden="true"></i></a>
+            </li>
+            <li><a href="mailto:lyoh001@gmail.com" aria-label="Email"><i class="fa fa-envelope"
+                     aria-hidden="true"></i></a></li>
+         </ul>
+         <p>&copy; 2024 John Yohan Lee. All rights reserved.</p>
+      </div>
+   </footer>
+   <script>
+      document.addEventListener('DOMContentLoaded', () => {
+         const navToggle = document.querySelector('.nav-toggle');
+         const navMenu = document.querySelector('.nav-menu');
+
+         navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+         });
+
+         const header = document.querySelector('#header');
+         window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+         });
+
+         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+               e.preventDefault();
+               document.querySelector(this.getAttribute('href')).scrollIntoView({
+                  behavior: 'smooth'
+               });
+               navMenu.classList.remove('active');
+            });
+         });
+      });
+
+      function togglePortfolio(portfolio) {
+         const mlPortfolio = document.getElementById('mlPortfolio');
+         const devopsPortfolio = document.getElementById('devopsPortfolio');
+         const buttons = document.querySelectorAll('.button-group .button');
+
+         if (portfolio === 'ml') {
+            mlPortfolio.classList.remove('hidden');
+            devopsPortfolio.classList.add('hidden');
+         } else {
+            mlPortfolio.classList.add('hidden');
+            devopsPortfolio.classList.remove('hidden');
+         }
+
+         buttons.forEach(button => button.classList.remove('active'));
+         document.querySelector(`button[onclick="togglePortfolio('${portfolio}')"]`).classList.add('active');
+      }
+   </script>
+</body>
+
+</html>
