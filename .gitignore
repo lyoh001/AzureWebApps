@@ -1,7 +1,9 @@
+**build**
 **node_modules**
 **pycache**
 .env
 .funcignore
+.gitignore
 .venv
 .vscode
 local.settings.json
