@@ -34,7 +34,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 origins = [
-    "https://domain.com",
+    "https://lyoh001.com",
     "http://localhost:8000",
 ]
 app.add_middleware(
