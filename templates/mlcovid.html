@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <link href="../static/css/mlcovid.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Covid Xray</title>
+</head>
+
+<body>
+    <header id="dashboard">
+        <h1><b>COVID</b> XRAY</h1>
+        <hr>
+        Covid Xray AI Detection System powered by Convolutional Neural Network
+        <hr>
+    </header>
+    <main>
+        <article id="mainLeft">
+            <section>
+                <h2>CODE</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a
+                        href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlcovid/notebook/notebook_mobilenet_v2.ipynb">Mobilenet_v2
+                        Analysis</a>
+                </p>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a
+                        href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlcovid/notebook/notebook_cnn.ipynb">CNN
+                        Analysis</a>
+                </p>
+            </section>
+            <section>
+                <h2>DESIGN</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/AzureFunctions">Architectural Design</a>
+                </p>
+            </section>
+            <section>
+                <h2>PROJECT</h2>
+                <p>
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/DLCovid19">Covid19 Xray Classification</a>
+                </p>
+                <p></p>
+            </section>
+        </article>
+        <article id="mainRight">
+            <section>
+                <h2>Covid Xray AI Detection</h2>
+                <p>
+                    Please select one of the xray images below and click predict to continue.
+                </p>
+                <ol>
+                    <li><label for="feature1">Xray Images (1-30)</label></li>
+                    <div class="slider">
+                        <p>
+                            <img src="../static/data/mlcovid/1.jpg" style="height: 30%; width: 30%" id="img" />
+                        </p>
+                        <p>Image ID: <span id="feature1_output"></span></p>
+                        <input type="range" min="1" max="30" value="1" step="1" class="slider" id="feature1">
+                    </div>
+                    <script>
+                        var slider = document.getElementById("feature1");
+                        var output = document.getElementById("feature1_output");
+                        output.innerHTML = slider.value;
+
+                        slider.oninput = function () {
+                            output.innerHTML = this.value;
+                            document.getElementById("img").src = "../static/data/mlcovid/" + slider.value + ".jpg";
+                        }
+                    </script>
+                    <button
+                        onclick="document.getElementById('prediction').innerHTML = 'Thinking...'; predict();">predict</button>
+                </ol>
+                <p>Radiology Report: <b style="color:#AA5EFF" id="prediction">Ready</b></p>
+                <script>
+                    function predict() {
+                        var feature1 = document.getElementById("feature1").value;
+                        var http = new XMLHttpRequest();
+                        http.open("POST", "/mlcovid", true);
+                        http.setRequestHeader("Content-Type", "application/json");
+                        http.onreadystatechange = function () {
+                            if (http.readyState == 4 && http.status == 200) {
+                                var response = http.responseText;
+                                displayResponse(response);
+                            }
+                        };
+                        http.send(JSON.stringify({ "image_id": [feature1] }));
+                    }
+                    function displayResponse(response) {
+                        var index = 0;
+                        var interval = setInterval(function () {
+                            if (index === 0) {
+                                document.getElementById("prediction").innerHTML = response[index];
+                            } else {
+                                document.getElementById("prediction").innerHTML += response[index];
+                            }
+                            index++;
+                            if (index >= response.length) {
+                                clearInterval(interval);
+                            }
+                        }, 10);
+                    }
+                </script>
+            </section>
+        </article>
+    </main>
+    <footer id="footer">
+        <hr>
+        <ul class="social">
+            <li><a href="https://github.com/lyoh001"><i class="fab fa-github"></i></a></li>
+            <li><a href="https://linkedin.com/in/lyoh001"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://lyoh001.com"><i class="fa fa-home"></i></a></li>
+            <li><a href="mailto:lyoh001@gmail.com"><i class="fa fa-envelope"></i></a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>

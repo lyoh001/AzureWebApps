@@ -179,6 +179,50 @@ async def post_mlcoffeeplantdiseases(user_input: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/mlcovid", response_class=HTMLResponse)
+async def get_mlcovid(request: Request):
+    return templates.TemplateResponse("mlcovid.html", {"request": request})
+
+
+@app.post("/mlcovid", response_class=HTMLResponse)
+async def post_mlcovid(user_input: dict):
+    try:
+        model = tflite.Interpreter(model_path="models/mlcovid_model.tflite")
+        image_id = int(next(iter(user_input["image_id"])))
+        normal = [1, 2, 4, 7, 8, 10, 13, 16, 19, 20, 22, 25, 28]
+        covid = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+        pneumonia = [5, 11, 14, 17, 23, 26, 29]
+        actual = (
+            "Normal"
+            if image_id in normal
+            else "Covid" if image_id in covid else "Pneumonia"
+        )
+        preprocessed_image = (
+            cv2.imread(f"static/data/mlcovid/{image_id}.jpg").reshape(1, 224, 224, -1)
+            / 255.0
+        )
+        model.allocate_tensors()
+        input_index = model.get_input_details()[0]["index"]
+        input_tensor = preprocessed_image.astype("float32")
+        output_details = model.get_output_details()
+        model.set_tensor(input_index, input_tensor)
+        model.invoke()
+        prediction = ["Normal", "Covid", "Pneumonia"][
+            np.argmax(model.get_tensor(output_details[0]["index"])[0])
+        ]
+        return f"The AI predicts that the patient in the x-ray image ({actual}) is {'not infected with any disease' if prediction == 'Normal' else f'infected with {prediction}'}. Please note that the accuracy of the model will depend on the quality of the x-ray image and the size of the training dataset. If you are concerned about the accuracy of the prediction, you should consult with a medical professional."
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Value Error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/mlvmaudit", response_class=HTMLResponse)
+async def get_mlvmaudit(request: Request):
+    return templates.TemplateResponse("mlvmaudit.html", {"request": request})
+
+
 @app.get("/wkls", response_class=HTMLResponse)
 async def get_wkls(request: Request):
     return templates.TemplateResponse("wkls.html", {"request": request})
