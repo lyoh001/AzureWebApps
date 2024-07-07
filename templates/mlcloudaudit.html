@@ -6,19 +6,7 @@
     <title>Cloud Audit</title>
 </head>
 
-<body onload="load()">
-    <script>
-        function load() {
-            var http = new XMLHttpRequest();
-            http.open("POST", "api/mlload", true);
-            http.setRequestHeader("Content-Type", "application/json");
-            http.onreadystatechange = function () {
-                var response = http.responseText
-                document.getElementById("prediction").innerHTML = "Ready.";
-            }
-            http.send();
-        }
-    </script>
+<body>
     <header id="dashboard">
         <h1><b>CLOUD</b> AUDIT</h1>
         <hr>
@@ -68,8 +56,7 @@
                     <button
                         onclick="document.getElementById('prediction').innerHTML = 'Thinking...'; predict();">predict</button>
                 </ol>
-                <p>Monthly Cloud Usage Prediction: <b style="color:#E85D04" id="prediction">Initializing AI. May take up
-                        to 5 seconds. Please wait.</b></p>
+                <p>Monthly Cloud Usage Prediction: <b style="color:#E85D04" id="prediction">Ready</b></p>
                 <script>
                     function predict() {
                         var feature1 = document.getElementById("feature1").value;

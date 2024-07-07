@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import tempfile
+import warnings
 from io import BytesIO
 from pickle import load
 
@@ -25,14 +26,13 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
+warnings.filterwarnings("ignore")
 load_dotenv(find_dotenv())
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 origins = [
     "https://domain.com",
-    "https://azurewebapp.azurewebsites.net",
-    "http://localhost:3000",
     "http://localhost:8000",
 ]
 
@@ -71,17 +71,15 @@ async def post_mlcloudaudit(user_input: dict):
             open("preprocessors/mlcloudaudit_y_preprocessor.pkl", "rb")
         )
         model = tflite.Interpreter(model_path="models/mlcloudaudit_model.tflite")
-
-        selected_month = user_input.get("month")
+        selected_month = [v for _, v in user_input.items()][0][0].split("-")[-1]
         if not selected_month:
             raise HTTPException(status_code=400, detail="Month is required")
-
-        selected_month = selected_month.split("-")[-1]
-        user_input_date = datetime.datetime.strptime(
-            f"2023-{selected_month}-{calendar.monthrange(2023, int(selected_month))[-1]}",
-            "%Y-%m-%d",
-        ).date()
-
+        user_input = str(
+            datetime.datetime.strptime(
+                f"2023-{selected_month}-{calendar.monthrange(2023, int(selected_month))[-1]}",
+                "%Y-%m-%d",
+            )
+        ).split()[0]
         N_PAST = 5
         N_FUTURE = 1
         ASFREQ = "MS"
@@ -92,18 +90,17 @@ async def post_mlcloudaudit(user_input: dict):
         df = pd.read_csv(
             io.StringIO(
                 """Date,Bill
-            2022-06,334230
-            2022-07,344321
-            2022-08,351373
-            2022-09,346814
-            2022-10,387434
-            2022-11,394204
-            2022-12,401308"""
+                2022-06,334230
+                2022-07,344321
+                2022-08,351373
+                2022-09,346814
+                2022-10,387434
+                2022-11,394204
+                2022-12,401308"""
             )
         )
         df[DATE_COL] = pd.to_datetime(df[DATE_COL].str.strip(), format="%Y-%m")
         df = df.set_index(DATE_COL).sort_index().asfreq(ASFREQ)
-
         X_test_scaled = X_preprocessor.transform(df)
         X_test = np.array(
             [
@@ -111,7 +108,6 @@ async def post_mlcloudaudit(user_input: dict):
                 for i in range(len(X_test_scaled) - N_PAST - N_FUTURE + 1)
             ]
         )
-
         pred_future, current_batch = [], X_test[-1:]
         for _ in range(N_PAST):
             model.allocate_tensors()
@@ -123,24 +119,12 @@ async def post_mlcloudaudit(user_input: dict):
             current_pred = model.get_tensor(output_details[0]["index"])[0]
             pred_future.append(current_pred)
             current_batch = np.append(current_batch[:, 1:, :], [[current_pred]], axis=1)
-
         df_future_pred = pd.DataFrame(
             y_preprocessor.inverse_transform(pred_future),
             columns=[y_label],
             index=pd.date_range(df.index[-1], periods=N_PAST, freq=FREQ, name=DATE_COL),
         )
-
-        prediction = (
-            f"The AI model predicts that future Azure consumption for {selected_month}/2023 "
-            f"will be AUD ${df_future_pred.loc[user_input_date]['Bill']:,.2f}. This prediction is based on the data analysis "
-            "and machine learning techniques that were used to optimize the license scheme and resource utilization. "
-            "The model takes into account a number of factors, including the current usage patterns, the forecasted growth "
-            "of the business, and the cost of Azure services. It is important to note that this is just a prediction and the "
-            "actual cost may vary. However, the model has been shown to be accurate in the past and it is a valuable tool for "
-            "businesses that are looking to reduce their Azure costs."
-        )
-
-        return prediction
+        return f"The AI model predicts that future Azure consumption for {selected_month}/2023 will be AUD ${df_future_pred.loc[user_input]['Bill']:,.2f}. This prediction is based on the data analysis and machine learning techniques that were used to optimize the license scheme and resource utilization. The model takes into account a number of factors, including the current usage patterns, the forecasted growth of the business, and the cost of Azure services. It is important to note that this is just a prediction and the actual cost may vary. However, the model has been shown to be accurate in the past and it is a valuable tool for businesses that are looking to reduce their Azure costs."
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"Value Error: {e}")
@@ -190,7 +174,7 @@ async def post_mlwklsbrush(user_input: dict):
                 ),
                 (
                     "human",
-                    "Write a concise overall comment for a student report card based on the following information. ```{question}```  Follow these three instructions.\n 1. Use Australian English spelling.\n 2. Do not use new lines.\n 3. Do not exceed 1500 characters in total.",
+                    "Write a concise overall comment for a student report card based on the following information. ```{question}```  Follow these three instructions.\n 1. Use Australian English spelling.\n 2. Do not use new lines.\n 3. Strictly never exceed 1200 characters in total.",
                 ),
             ]
         )
@@ -217,11 +201,13 @@ async def post_mlwklsgenerate(user_input: dict):
         attendance = user_input["attendance"]
         behaviour = user_input["behaviour"]
         effort = user_input["effort"]
-        communucation_skills = "\n".join(
-            f"- {skill.split(']')[1]}" for skill in user_input["communicationSkills"]
+        communication_skills = "\n".join(
+            f"\u2022 {skill.split(']')[1]}"
+            for skill in user_input["communicationSkills"]
         )
         understanding_skills = "\n".join(
-            f"- {skill.split(']')[1]}" for skill in user_input["understandingSkills"]
+            f"\u2022 {skill.split(']')[1]}"
+            for skill in user_input["understandingSkills"]
         )
         overall_comment = user_input["overallComment"]
         src_path = "static/pdf"
@@ -251,14 +237,40 @@ async def post_mlwklsgenerate(user_input: dict):
 
             c.setFontSize(9)
             text_y = 652
-            for line in communucation_skills.split("\n"):
-                c.drawString(57, text_y, line)
-                text_y -= 11
+            indent = 57
+            bullet_indent = 67
 
+            def draw_wrapped_text(text, start_y):
+                for line in text.split("\n"):
+                    words = line.split()
+                    current_line = ""
+                    first_line = True
+                    for word in words:
+                        test_line = current_line + word + " "
+                        width = c.stringWidth(test_line, "gulim", 9)
+                        if width <= max_width:
+                            current_line = test_line
+                        else:
+                            c.drawString(
+                                indent if first_line else bullet_indent,
+                                start_y,
+                                current_line.strip(),
+                            )
+                            start_y -= 11
+                            current_line = word + " "
+                            first_line = False
+                    if current_line:
+                        c.drawString(
+                            indent if first_line else bullet_indent,
+                            start_y,
+                            current_line.strip(),
+                        )
+                        start_y -= 11
+                return start_y
+
+            text_y = draw_wrapped_text(communication_skills, text_y)
             text_y = 480
-            for line in understanding_skills.split("\n"):
-                c.drawString(57, text_y, line)
-                text_y -= 11
+            text_y = draw_wrapped_text(understanding_skills, text_y)
 
             text_y = 305
             words = overall_comment.split()

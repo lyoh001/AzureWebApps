@@ -4,13 +4,11 @@ name: Azure Web Apps
 on: [workflow_dispatch]
 
 env:
-  AZURE_RESOURCE_GROUP_NAME: "azurerg"
-  AZURE_RESOURCE_DNS_NAME: "https://domain.com"
-  AZURE_RESOURCE_NAME: "azurewebapp"
-  AZURE_RESOURCE_BE_SITE_NAME: "https://azurewebapp.azurewebsites.net"
-  AZURE_RESOURCE_FE_SITE_NAME: "https://azurewebapp.azurewebsites.net"
   PYTHON_VERSION: "3.10"
   PYTHON_ARCHITECTURE: "x64"
+  # AZURE_RESOURCE_GROUP_NAME: "azurerg"
+  # AZURE_RESOURCE_NAME: "azurewebapp"
+  # AZURE_RESOURCE_DNS_NAME: "https://domain.com"
 
 permissions:
   id-token: write
@@ -70,12 +68,10 @@ jobs:
         with:
           inlineScript: |
             az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            az webapp cors add --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --allowed-origins ${{ env.AZURE_RESOURCE_DNS_NAME }}
-            az webapp cors add --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --allowed-origins ${{ env.AZURE_RESOURCE_BE_SITE_NAME }}
-            az webapp cors add --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --allowed-origins ${{ env.AZURE_RESOURCE_FE_SITE_NAME }}
-            az webapp config set --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --startup-file='gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app --timeout 60 --forwarded-allow-ips="*"'
-            az webapp config appsettings set --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
-            az webapp config appsettings set --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.AZURE_RESOURCE_NAME }} --settings WEBSITE_WEBDEPLOY_USE_SCM=true
+            az webapp cors add --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ secrets.AZURE_RESOURCE_NAME }} --allowed-origins ${{ secrets.AZURE_RESOURCE_DNS_NAME }}
+            az webapp config set --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ secrets.AZURE_RESOURCE_NAME }} --startup-file='gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app --timeout 60 --forwarded-allow-ips="*"'
+            az webapp config appsettings set --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ secrets.AZURE_RESOURCE_NAME }} --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
+            az webapp config appsettings set --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ secrets.AZURE_RESOURCE_NAME }} --settings WEBSITE_WEBDEPLOY_USE_SCM=true
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
@@ -87,5 +83,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: ${{ env.AZURE_RESOURCE_NAME }}
+          app-name: ${{ secrets.AZURE_RESOURCE_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPPS_PUBLISH_PROFILE }}
