@@ -1,0 +1,152 @@
+<html>
+
+<head>
+    <link href="../static/css/mltelecom.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Telecom Market</title>
+</head>
+
+<body>
+    <header id="dashboard">
+        <h1><b>TELECOM</b> MARKET</h1>
+        <hr>
+        Telecom Market Insights Dashboard and AI Plan Optimizer
+        <hr>
+        <iframe title="telecom - Page 1" width="100%" height="100%"
+            src="https://app.powerbi.com/view?r=eyJrIjoiOTc3ZDgwNmUtNjVlYS00NTkxLTk1ZTgtMDBhZTMzMDBhNDBiIiwidCI6IjBmNDAwZDZmLTYxNGMtNGQ5YS04ZjNjLTRkYzdlNmM4MjM1MiJ9"
+            frameborder="0" allowFullScreen="true"></iframe>
+    </header>
+    <main>
+        <article id="mainLeft">
+            <section>
+                <h2>CODE</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mltelecom/notebook/notebook.ipynb">Revenue
+                        Analysis</a>
+                </p>
+            </section>
+            <section>
+                <h2>DESIGN</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/AzureFunctions">Architectural Design</a>
+                </p>
+            </section>
+            <section>
+                <h2>PROJECT</h2>
+                <p>
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <a href="https://codebasics.io/challenge/codebasics-resume-project-challenge">Codebasics</a>
+                </p>
+                <p></p>
+            </section>
+        </article>
+        <article id="mainRight">
+            <section>
+                <h2>AI Plan Optimizer</h2>
+                <p>
+                    Please populate the input fields listed below to optimize internet plan.
+                </p>
+                <ol>
+                    <li>
+                        <select name="feature1" id="feature1">
+                            <option value="Mumbai">City Name</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Jaipur">Jaipur</option>
+                            <option value="Lucknow">Lucknow</option>
+                            <option value="Patna">Patna</option>
+                            <option value="Coimbatore">Coimbatore</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Gurgaon">Gurgaon</option>
+                            <option value="Raipur">Raipur</option>
+                        </select>
+                    </li>
+                    <li><input id="feature2" type="month" value="2022-10" min="2022-10" max="2023-12">
+                    </li>
+                    <li><label for="feature3">Valid Period (1-180) Days</label></li>
+                    <div class="slider">
+                        <input type="range" min="1" max="180" value="1" step="1" class="slider" id="feature3">
+                        <p><span id="feature3_output"></span> Days</p>
+                    </div>
+                    <script>
+                        var slider3 = document.getElementById("feature3");
+                        var output3 = document.getElementById("feature3_output");
+                        output3.innerHTML = slider3.value;
+
+                        slider3.oninput = function () {
+                            output3.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature4">Data Size (0.1-30) Gb</label></li>
+                    <div class="slider">
+                        <input type="range" min="0.1" max="30" value="0.1" step="0.1" class="slider" id="feature4">
+                        <p><span id="feature4_output"></span> Gb</p>
+                    </div>
+                    <script>
+                        var slider4 = document.getElementById("feature4");
+                        var output4 = document.getElementById("feature4_output");
+                        output4.innerHTML = slider4.value;
+
+                        slider4.oninput = function () {
+                            output4.innerHTML = this.value;
+                        }
+                    </script>
+                    <button
+                        onclick="document.getElementById('prediction').innerHTML = 'Thinking...'; predict();">predict</button>
+                </ol>
+                <p>Monthly Plan Revenue Prediction: <b style="color:#FFB703" id="prediction">Ready</b></p>
+                <script>
+                    function predict() {
+                        var feature1 = document.getElementById("feature1").value;
+                        var feature2 = document.getElementById("feature2").value;
+                        var feature3 = document.getElementById("feature3").value;
+                        var feature4 = document.getElementById("feature4").value;
+                        var http = new XMLHttpRequest();
+                        http.open("POST", "/mltelecom", true);
+                        http.setRequestHeader("Content-Type", "application/json");
+                        http.onreadystatechange = function () {
+                            if (http.readyState == 4 && http.status == 200) {
+                                var response = http.responseText;
+                                displayResponse(response);
+                            }
+                        };
+                        http.send(JSON.stringify({ "city_name": [feature1], "time_period": [feature2], "valid_period": [feature3], "data_size": [feature4] }));
+                    }
+                    function displayResponse(response) {
+                        var index = 0;
+                        var interval = setInterval(function () {
+                            if (index === 0) {
+                                document.getElementById("prediction").innerHTML = response[index];
+                            } else {
+                                document.getElementById("prediction").innerHTML += response[index];
+                            }
+                            index++;
+                            if (index >= response.length) {
+                                clearInterval(interval);
+                            }
+                        }, 10);
+                    }
+                </script>
+            </section>
+        </article>
+    </main>
+    <footer id="footer">
+        <hr>
+        <ul class="social">
+            <li><a href="https://github.com/lyoh001"><i class="fab fa-github"></i></a></li>
+            <li><a href="https://linkedin.com/in/lyoh001"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://lyoh001.com"><i class="fa fa-home"></i></a></li>
+            <li><a href="mailto:lyoh001@gmail.com"><i class="fa fa-envelope"></i></a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>

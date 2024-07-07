@@ -12,6 +12,7 @@ from pickle import load
 import cv2
 import numpy as np
 import pandas as pd
+import scipy.stats as stat
 import tflite_runtime.interpreter as tflite
 import uvicorn
 from dotenv import find_dotenv, load_dotenv
@@ -359,6 +360,54 @@ async def post_mlsupplychain(user_input: dict):
         model_otd.invoke()
         prediction_otd = model_otd.get_tensor(output_details[0]["index"])[0][0]
         return f"The AI model predicts that the probability of in-full delivery is {prediction_ifd * 100:.2f}% and the probability of on-time delivery is {prediction_otd * 100:.2f}%. These probabilities provide insights into the likelihood of successful and on-time delivery for the supply."
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Value Error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/mltelecom", response_class=HTMLResponse)
+async def get_mltelecom(request: Request):
+    return templates.TemplateResponse("mltelecom.html", {"request": request})
+
+
+@app.post("/mltelecom", response_class=HTMLResponse)
+async def post_mltelecom(user_input: dict):
+    try:
+        preprocessor = load(open("preprocessors/mltelecom_preprocessor.pkl", "rb"))
+        model = tflite.Interpreter(model_path="models/mltelecom_model.tflite")
+        payload = {
+            k: [np.nan] if next(iter(v)) == "" else v for k, v in user_input.items()
+        }
+        city_name = next(iter(payload["city_name"]))
+        time_period = (
+            datetime.datetime.strptime(payload["time_period"][0], "%Y-%m")
+            - datetime.datetime.strptime("2022-09", "%Y-%m")
+        ).days // 29
+        data_size = float(next(iter(payload["data_size"])))
+        valid_period = float(next(iter(payload["valid_period"])))
+        X = pd.DataFrame(
+            {
+                "city_name": [city_name],
+                "time_period": [time_period],
+                "data_size": [data_size],
+                "valid_period": [valid_period],
+                "before/after_5g": ["After 5G"],
+            }
+        )
+        X["data_size"] = stat.boxcox(X["data_size"].iloc[:1], -0.15236159025676418)[0]
+        X["valid_period"] = stat.boxcox(X["valid_period"].iloc[:1], 0.2613605015797948)[
+            0
+        ]
+        model.allocate_tensors()
+        input_index = model.get_input_details()[0]["index"]
+        input_tensor = preprocessor.transform(X).astype("float32")
+        output_details = model.get_output_details()
+        model.set_tensor(input_index, input_tensor)
+        model.invoke()
+        prediction = model.get_tensor(output_details[0]["index"])[0][0]
+        return f"Based on the input attributes of city_name (ie '{city_name}'), data_size (ie '{data_size} Gb'), and valid_period (ie '{int(valid_period)} days'), the AI model predicts the monthly plan revenue to be ₹{prediction:,.2f} (Crores) post the 5G rollout. The model is trained on a dataset of historical data, and it uses this data to learn the relationships between the input attributes and the output. The accuracy of the model will depend on the quality of the training data. If the training data is representative of the real world, then the model will be more accurate. However, if the training data is not representative of the real world, then the model may be less accurate. The model can be used to help telecommunication companies make better decisions about their pricing and marketing strategies. For example, the model can be used to identify cities where there is a high demand for 5G plans, or to identify time periods when there is a seasonal increase in demand for mobile data."
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"Value Error: {e}")
