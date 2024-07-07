@@ -1,0 +1,182 @@
+<html>
+
+<head>
+    <link href="../static//css/mlmaternalmortality.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Maternal Mortality</title>
+</head>
+
+<body>
+    <header id="dashboard">
+        <h1><b>MATERNAL</b> MORTALITY</h1>
+        <hr>
+        Maternal Mortality Dashboard and AI Risk Prediction
+        <hr>
+        <iframe title="maternalmortality - Page 1" width="100%" height="100%"
+            src="https://app.powerbi.com/view?r=eyJrIjoiYTAyMzAzZjctZmYwMi00YWIyLWJlMTEtNjY1N2Y3YWFmNzhhIiwidCI6IjBmNDAwZDZmLTYxNGMtNGQ5YS04ZjNjLTRkYzdlNmM4MjM1MiJ9"
+            frameborder="0" allowFullScreen="true"></iframe>
+    </header>
+    <main>
+        <article id="mainLeft">
+            <section>
+                <h2>CODE</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a
+                        href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlmaternalmortality/notebook/notebook.ipynb">Risk
+                        Level Analysis</a>
+                </p>
+            </section>
+            <section>
+                <h2>DESIGN</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/AzureFunctions">Architectural Design</a>
+                </p>
+            </section>
+        </article>
+        <article id="mainRight">
+            <section>
+                <h2>AI Risk Prediction</h2>
+                <p>
+                    Please populate the patient's metrics listed below and click predict to continue.
+                </p>
+                <ol>
+                    <li><label for="feature1">Age (10-70)</label></li>
+                    <div class="slider">
+                        <input type="range" min="10" max="70" value="10" step="1" class="slider" id="feature1">
+                        <p><span id="feature1_output"></span></p>
+                    </div>
+                    <script>
+                        var slider1 = document.getElementById("feature1");
+                        var output1 = document.getElementById("feature1_output");
+                        output1.innerHTML = slider1.value;
+
+                        slider1.oninput = function () {
+                            output1.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature2">Systolic BP (70-160)</label></li>
+                    <div class="slider">
+                        <input type="range" min="70" max="160" value="70" step="1" class="slider" id="feature2">
+                        <p><span id="feature2_output"></span> </p>
+                    </div>
+                    <script>
+                        var slider2 = document.getElementById("feature2");
+                        var output2 = document.getElementById("feature2_output");
+                        output2.innerHTML = slider2.value;
+
+                        slider2.oninput = function () {
+                            output2.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature3">Diastolic BP (49-100)</label></li>
+                    <div class="slider">
+                        <input type="range" min="49" max="100" value="49" step="1" class="slider" id="feature3">
+                        <p><span id="feature3_output"></span> </p>
+                    </div>
+                    <script>
+                        var slider3 = document.getElementById("feature3");
+                        var output3 = document.getElementById("feature3_output");
+                        output3.innerHTML = slider3.value;
+
+                        slider3.oninput = function () {
+                            output3.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature4">BS (6-20)</label></li>
+                    <div class="slider">
+                        <input type="range" min="6" max="20" value="6" step="1" class="slider" id="feature4">
+                        <p><span id="feature4_output"></span> </p>
+                    </div>
+                    <script>
+                        var slider4 = document.getElementById("feature4");
+                        var output4 = document.getElementById("feature4_output");
+                        output4.innerHTML = slider4.value;
+
+                        slider4.oninput = function () {
+                            output4.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature5">BodyTemp (98-103)</label></li>
+                    <div class="slider">
+                        <input type="range" min="98" max="103" value="98" step="1" class="slider" id="feature5">
+                        <p><span id="feature5_output"></span> </p>
+                    </div>
+                    <script>
+                        var slider5 = document.getElementById("feature5");
+                        var output5 = document.getElementById("feature5_output");
+                        output5.innerHTML = slider5.value;
+
+                        slider5.oninput = function () {
+                            output5.innerHTML = this.value;
+                        }
+                    </script>
+                    <li><label for="feature6">HeartRate (60-90)</label></li>
+                    <div class="slider">
+                        <input type="range" min="60" max="90" value="60" step="1" class="slider" id="feature6">
+                        <p><span id="feature6_output"></span> </p>
+                    </div>
+                    <script>
+                        var slider6 = document.getElementById("feature6");
+                        var output6 = document.getElementById("feature6_output");
+                        output6.innerHTML = slider6.value;
+
+                        slider6.oninput = function () {
+                            output6.innerHTML = this.value;
+                        }
+                    </script>
+                    <button
+                        onclick="document.getElementById('prediction').innerHTML = 'Thinking...'; predict();">predict</button>
+                </ol>
+                <p>Patient Risk Prediction: <b style="color:#1DD3B0" id="prediction">Ready</b>
+                </p>
+                <script>
+                    function predict() {
+                        var feature1 = document.getElementById("feature1").value;
+                        var feature2 = document.getElementById("feature2").value;
+                        var feature3 = document.getElementById("feature3").value;
+                        var feature4 = document.getElementById("feature4").value;
+                        var feature5 = document.getElementById("feature5").value;
+                        var feature6 = document.getElementById("feature6").value;
+                        var http = new XMLHttpRequest();
+                        http.open("POST", "/mlmaternalmortality", true);
+                        http.setRequestHeader("Content-Type", "application/json");
+                        http.onreadystatechange = function () {
+                            if (http.readyState == 4 && http.status == 200) {
+                                var response = http.responseText;
+                                displayResponse(response);
+                            }
+                        };
+                        http.send(JSON.stringify({ "Age": [feature1], "SystolicBP": [feature2], "DiastolicBP": [feature3], "BS": [feature4], "BodyTemp": [feature5], "HeartRate": [feature6] }));
+                    }
+                    function displayResponse(response) {
+                        var index = 0;
+                        var interval = setInterval(function () {
+                            if (index === 0) {
+                                document.getElementById("prediction").innerHTML = response[index];
+                            } else {
+                                document.getElementById("prediction").innerHTML += response[index];
+                            }
+                            index++;
+                            if (index >= response.length) {
+                                clearInterval(interval);
+                            }
+                        }, 10);
+                    }
+                </script>
+            </section>
+        </article>
+    </main>
+    <footer id="footer">
+        <hr>
+        <ul class="social">
+            <li><a href="https://github.com/lyoh001"><i class="fab fa-github"></i></a></li>
+            <li><a href="https://linkedin.com/in/lyoh001"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://lyoh001.com"><i class="fa fa-home"></i></a></li>
+            <li><a href="mailto:lyoh001@gmail.com"><i class="fa fa-envelope"></i></a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>

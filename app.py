@@ -218,6 +218,154 @@ async def post_mlcovid(user_input: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/mlmaternalmortality", response_class=HTMLResponse)
+async def get_mlmaternalmortality(request: Request):
+    return templates.TemplateResponse("mlmaternalmortality.html", {"request": request})
+
+
+@app.post("/mlmaternalmortality", response_class=HTMLResponse)
+async def post_mlmaternalmortality(user_input: dict):
+    try:
+        preprocessor = load(
+            open("preprocessors/mlmaternalmortality_preprocessor.pkl", "rb")
+        )
+        model = tflite.Interpreter(model_path="models/mlmaternalmortality_model.tflite")
+        payload = pd.DataFrame(
+            {k: [np.nan] if next(iter(v)) == "" else v for k, v in user_input.items()},
+            dtype="object",
+        )
+        model.allocate_tensors()
+        input_index = model.get_input_details()[0]["index"]
+        input_tensor = preprocessor.transform(payload).astype("float32")
+        output_details = model.get_output_details()
+        model.set_tensor(input_index, input_tensor)
+        model.invoke()
+
+        prediction = np.argmax(model.get_tensor(output_details[0]["index"]))
+        age = user_input["Age"][0]
+        blood_sugar = user_input["BS"][0]
+        body_temp = user_input["BodyTemp"][0]
+        diastolic_bp = user_input["DiastolicBP"][0]
+        heart_rate = user_input["HeartRate"][0]
+        systolic_bp = user_input["SystolicBP"][0]
+        risk_level = "Low" if prediction == 0 else "Mid" if prediction == 1 else "High"
+        return f"If the patient is {age} years old, has a blood sugar level of {blood_sugar} mg/dL, a body temperature of {body_temp} degrees Fahrenheit, a diastolic blood pressure of {diastolic_bp} mmHg, a heart rate of {heart_rate} beats per minute, and a systolic blood pressure of {systolic_bp} mmHg, the model would predict that the patient is at {risk_level} Risk for maternal complications. The model is still under development, but it has been shown to be effective in identifying potential health risks during pregnancy. The model can be used to help doctors and other healthcare providers make informed decisions about the care of pregnant women."
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Value Error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/mlsupplychain", response_class=HTMLResponse)
+async def get_mlsupplychain(request: Request):
+    return templates.TemplateResponse("mlsupplychain.html", {"request": request})
+
+
+@app.post("/mlsupplychain", response_class=HTMLResponse)
+async def post_mlsupplychain(user_input: dict):
+    try:
+        df = pd.read_csv(
+            "static/data/mlsupplychain/fact_order_lines_merged.csv",
+            delimiter=",",
+            thousands=",",
+        )
+        preprocessor_ifd = load(
+            open("preprocessors/mlsupplychain_preprocessor_ifd.pkl", "rb")
+        )
+        preprocessor_otd = load(
+            open("preprocessors/mlsupplychain_preprocessor_otd.pkl", "rb")
+        )
+        model_ifd = tflite.Interpreter(
+            model_path="models/mlsupplychain_model_ifd.tflite"
+        )
+        model_otd = tflite.Interpreter(
+            model_path="models/mlsupplychain_model_otd.tflite"
+        )
+        payload = {
+            k: [np.nan] if next(iter(v)) == "" else v for k, v in user_input.items()
+        }
+        customer_id = int(next(iter(payload["customer_id"])))
+        customer_name = df[df["customer_id"] == customer_id]["customer_name"].iloc[0]
+        city = df[df["customer_id"] == customer_id]["city"].iloc[0]
+        product_name = " ".join(
+            s.capitalize() if i else s.upper()
+            for i, s in enumerate(payload["product_name"][0].split())
+        )
+        category = df[df["product_name"] == product_name]["category"].iloc[0]
+        sub_category = df[df["product_name"] == product_name]["sub_category"].iloc[0]
+        order_qty = int(next(iter(payload["order_qty"])))
+        infull_target = df[df["customer_id"] == customer_id]["infull_target%"].iloc[0]
+        ontime_target = df[df["customer_id"] == customer_id]["ontime_target%"].iloc[0]
+        order_date = datetime.datetime.strptime(payload["order_date"][0], "%Y-%m-%d")
+        week_no = order_date.isocalendar()[1]
+        days_for_delivery = int(next(iter(payload["days_for_delivery"])))
+        total_order_qty = order_qty
+        month = order_date.month
+        day = order_date.day
+        dayofweek = order_date.weekday()
+        order_rate = 1
+
+        X_ifd = pd.DataFrame(
+            {
+                "customer_id": [str(customer_id)],
+                "customer_name": [customer_name],
+                "city": [city],
+                "product_name": [product_name],
+                "category": [category],
+                "sub_category": [sub_category],
+                "order_qty": [order_qty**0.5],
+                "infull_target%": [infull_target],
+                "week_no": [week_no],
+                "days_for_delivery": [days_for_delivery],
+                "total_order_qty": [total_order_qty],
+                "month": [month],
+                "day": [day],
+                "dayofweek": [dayofweek],
+                "order_rate": [order_rate],
+            }
+        )
+        X_otd = pd.DataFrame(
+            {
+                "customer_id": [str(customer_id)],
+                "customer_name": [customer_name],
+                "city": [city],
+                "product_name": [product_name],
+                "category": [category],
+                "sub_category": [sub_category],
+                "order_qty": [order_qty**0.5],
+                "ontime_target%": [ontime_target],
+                "week_no": [week_no],
+                "days_for_delivery": [days_for_delivery],
+                "total_order_qty": [total_order_qty],
+                "month": [month],
+                "day": [day],
+                "dayofweek": [dayofweek],
+                "order_rate": [order_rate],
+            }
+        )
+        model_ifd.allocate_tensors()
+        input_index = model_ifd.get_input_details()[0]["index"]
+        input_tensor = preprocessor_ifd.transform(X_ifd).astype("float32")
+        output_details = model_ifd.get_output_details()
+        model_ifd.set_tensor(input_index, input_tensor)
+        model_ifd.invoke()
+        prediction_ifd = model_ifd.get_tensor(output_details[0]["index"])[0][0]
+        model_otd.allocate_tensors()
+        input_index = model_otd.get_input_details()[0]["index"]
+        input_tensor = preprocessor_otd.transform(X_otd).astype("float32")
+        output_details = model_otd.get_output_details()
+        model_otd.set_tensor(input_index, input_tensor)
+        model_otd.invoke()
+        prediction_otd = model_otd.get_tensor(output_details[0]["index"])[0][0]
+        return f"The AI model predicts that the probability of in-full delivery is {prediction_ifd * 100:.2f}% and the probability of on-time delivery is {prediction_otd * 100:.2f}%. These probabilities provide insights into the likelihood of successful and on-time delivery for the supply."
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Value Error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/mlvmaudit", response_class=HTMLResponse)
 async def get_mlvmaudit(request: Request):
     return templates.TemplateResponse("mlvmaudit.html", {"request": request})

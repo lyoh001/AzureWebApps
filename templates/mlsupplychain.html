@@ -1,0 +1,199 @@
+<html>
+
+<head>
+    <link href="../static/css/mlsupplychain.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Supply Chain</title>
+</head>
+
+<body>
+    <header id="dashboard">
+        <h1><b>SUPPLY</b> CHAIN</h1>
+        <hr>
+        Supply Chain Dashboard and AI Delivery Prediction
+        <hr>
+        <iframe title="supplychain - Page 1" width="100%" height="100%"
+            src="https://app.powerbi.com/view?r=eyJrIjoiNThkNzgyNWUtOTdiOC00ODNkLWI1ZDItNmJmMTE0MTAzMWFkIiwidCI6IjBmNDAwZDZmLTYxNGMtNGQ5YS04ZjNjLTRkYzdlNmM4MjM1MiJ9"
+            frameborder="0" allowFullScreen="true"></iframe>
+    </header>
+    <main>
+        <article id="mainLeft">
+            <section>
+                <h2>CODE</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a
+                        href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlsupplychain/notebook/notebook_otd.ipynb">OnTime
+                        Delivery Analysis</a>
+                </p>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a
+                        href="https://github.com/lyoh001/AzureStaticWebApps/blob/main/mlsupplychain/notebook/notebook_ifd.ipynb">InFull
+                        Delivery Analysis</a>
+                </p>
+            </section>
+            <section>
+                <h2>DESIGN</h2>
+                <p>
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <a href="https://github.com/lyoh001/AzureFunctions">Architectural Design</a>
+                </p>
+            </section>
+            <section>
+                <h2>PROJECT</h2>
+                <p>
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <a href="https://codebasics.io/event/codebasics-resume-project-challenge">Codebasics</a>
+                </p>
+                <p></p>
+            </section>
+        </article>
+        <article id="mainRight">
+            <section>
+                <h2>AI Delivery Prediction</h2>
+                <p>
+                    Please populate the input fields listed below and click predict to continue.
+                </p>
+                <ol>
+                    <li>
+                        <select name="feature1" id="feature1">
+                            <option value="789201">Customer ID</option>
+                            <option value="789201">789201</option>
+                            <option value="789202">789202</option>
+                            <option value="789203">789203</option>
+                            <option value="789301">789301</option>
+                            <option value="789303">789303</option>
+                            <option value="789101">789101</option>
+                            <option value="789102">789102</option>
+                            <option value="789103">789103</option>
+                            <option value="789121">789121</option>
+                            <option value="789122">789122</option>
+                            <option value="789220">789220</option>
+                            <option value="789221">789221</option>
+                            <option value="789221">789221</option>
+                            <option value="789320">789320</option>
+                            <option value="789321">789321</option>
+                            <option value="789401">789401</option>
+                            <option value="789402">789402</option>
+                            <option value="789403">789403</option>
+                            <option value="789420">789420</option>
+                            <option value="789421">789421</option>
+                            <option value="789422">789422</option>
+                            <option value="789501">789501</option>
+                            <option value="789503">789503</option>
+                            <option value="789520">789520</option>
+                            <option value="789521">789521</option>
+                            <option value="789522">789522</option>
+                            <option value="789601">789601</option>
+                            <option value="789603">789603</option>
+                            <option value="789702">789702</option>
+                            <option value="789703">789703</option>
+                            <option value="789621">789621</option>
+                            <option value="789622">789622</option>
+                            <option value="789720">789720</option>
+                            <option value="789721">789721</option>
+                            <option value="789902">789902</option>
+                            <option value="789903">789903</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select name="feature2" id="feature2">
+                            <option value="AM Milk 500">Product Name</option>
+                            <option value="AM Milk 500">AM Milk 500</option>
+                            <option value="AM Milk 250">AM Milk 250</option>
+                            <option value="AM Milk 100">AM Milk 100</option>
+                            <option value="AM Butter 100">AM Butter 100</option>
+                            <option value="AM Butter 250">AM Butter 250</option>
+                            <option value="AM Butter 500">AM Butter 500</option>
+                            <option value="AM Ghee 250">AM Ghee 250</option>
+                            <option value="AM Ghee 150">AM Ghee 150</option>
+                            <option value="AM Ghee 100">AM Ghee 100</option>
+                            <option value="AM Curd 250">AM Curd 250</option>
+                            <option value="AM Curd 100">AM Curd 100</option>
+                            <option value="AM Curd 50">AM Curd 50</option>
+                            <option value="AM Biscuits 750">AM Biscuits 750</option>
+                            <option value="AM Biscuits 500">AM Biscuits 500</option>
+                            <option value="AM Biscuits 250">AM Biscuits 250</option>
+                            <option value="AM Tea 500">AM Tea 500</option>
+                            <option value="AM Tea 250">AM Tea 250</option>
+                            <option value="AM Tea 100">AM Tea 100</option>
+                        </select>
+                    </li>
+                    <li><input id="feature3" name="feature3" type="date" value="2022-01-01" min="2022-01-01"
+                            max="2022-12-31"></li>
+                    <li>
+                        <select name="feature4" id="feature4">
+                            <option value="1">Days for Delivery</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </li>
+                    <li><label for="feature5">Order Quantity (20-500)</label></li>
+                    <div class="slider">
+                        <input type="range" min="20" max="500" value="20" step="1" class="slider" id="feature5">
+                        <p>Qty: <span id="feature5_output"></span></p>
+                    </div>
+                    <script>
+                        var slider5 = document.getElementById("feature5");
+                        var output5 = document.getElementById("feature5_output");
+                        output5.innerHTML = slider5.value;
+
+                        slider5.oninput = function () {
+                            output5.innerHTML = this.value;
+                        }
+                    </script>
+                    <button
+                        onclick="document.getElementById('prediction').innerHTML = 'Thinking...'; predict();">predict</button>
+                </ol>
+                <p>Stock Delivery Prediction: <b style="color:#8ECAE6" id="prediction">Ready</b>
+                </p>
+                <script>
+                    function predict() {
+                        var feature1 = document.getElementById("feature1").value;
+                        var feature2 = document.getElementById("feature2").value;
+                        var feature3 = document.getElementById("feature3").value;
+                        var feature4 = document.getElementById("feature4").value;
+                        var feature5 = document.getElementById("feature5").value;
+                        var http = new XMLHttpRequest();
+                        http.open("POST", "/mlsupplychain", true);
+                        http.setRequestHeader("Content-Type", "application/json");
+                        http.onreadystatechange = function () {
+                            if (http.readyState == 4 && http.status == 200) {
+                                var response = http.responseText;
+                                displayResponse(response);
+                            }
+                        };
+                        http.send(JSON.stringify({ "customer_id": [feature1], "product_name": [feature2], "order_date": [feature3], "days_for_delivery": [feature4], "order_qty": [feature5] }));
+                    }
+                    function displayResponse(response) {
+                        var index = 0;
+                        var interval = setInterval(function () {
+                            if (index === 0) {
+                                document.getElementById("prediction").innerHTML = response[index];
+                            } else {
+                                document.getElementById("prediction").innerHTML += response[index];
+                            }
+                            index++;
+                            if (index >= response.length) {
+                                clearInterval(interval);
+                            }
+                        }, 10);
+                    }
+                </script>
+            </section>
+        </article>
+    </main>
+    <footer id="footer">
+        <hr>
+        <ul class="social">
+            <li><a href="https://github.com/lyoh001"><i class="fab fa-github"></i></a></li>
+            <li><a href="https://linkedin.com/in/lyoh001"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://lyoh001.com"><i class="fa fa-home"></i></a></li>
+            <li><a href="mailto:lyoh001@gmail.com"><i class="fa fa-envelope"></i></a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
