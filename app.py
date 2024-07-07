@@ -9,6 +9,7 @@ import warnings
 from io import BytesIO
 from pickle import load
 
+import cv2
 import numpy as np
 import pandas as pd
 import tflite_runtime.interpreter as tflite
@@ -125,6 +126,52 @@ async def post_mlcloudaudit(user_input: dict):
             index=pd.date_range(df.index[-1], periods=N_PAST, freq=FREQ, name=DATE_COL),
         )
         return f"The AI model predicts that future Azure consumption for {selected_month}/2023 will be AUD ${df_future_pred.loc[user_input]['Bill']:,.2f}. This prediction is based on the data analysis and machine learning techniques that were used to optimize the license scheme and resource utilization. The model takes into account a number of factors, including the current usage patterns, the forecasted growth of the business, and the cost of Azure services. It is important to note that this is just a prediction and the actual cost may vary. However, the model has been shown to be accurate in the past and it is a valuable tool for businesses that are looking to reduce their Azure costs."
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Value Error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/mlcoffeeplantdiseases", response_class=HTMLResponse)
+async def get_mlcoffeeplantdiseases(request: Request):
+    return templates.TemplateResponse(
+        "mlcoffeeplantdiseases.html", {"request": request}
+    )
+
+
+@app.post("/mlcoffeeplantdiseases", response_class=HTMLResponse)
+async def post_mlcoffeeplantdiseases(user_input: dict):
+    try:
+        model = tflite.Interpreter(
+            model_path="models/mlcoffeeplantdiseases_model.tflite"
+        )
+        image_id = int(next(iter(user_input["image_id"])))
+        actual = (
+            "healthy"
+            if image_id % 4 == 1
+            else (
+                "rust"
+                if image_id % 4 == 2
+                else "miner" if image_id % 4 == 3 else "phoma"
+            )
+        )
+        preprocessed_image = (
+            cv2.imread(f"static/data/mlcoffeeplantdiseases/{image_id}.jpg").reshape(
+                1, 224, 224, -1
+            )
+            / 255.0
+        )
+        model.allocate_tensors()
+        input_index = model.get_input_details()[0]["index"]
+        input_tensor = preprocessed_image.astype("float32")
+        output_details = model.get_output_details()
+        model.set_tensor(input_index, input_tensor)
+        model.invoke()
+        prediction = ["healthy", "rust", "miner", "phoma"][
+            np.argmax(model.get_tensor(output_details[0]["index"])[0])
+        ]
+        return f"Actual: {actual}  |  Prediction: {prediction}"
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"Value Error: {e}")
