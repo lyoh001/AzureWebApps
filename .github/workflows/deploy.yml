@@ -4,8 +4,8 @@ on: [push]
 # on: [workflow_dispatch]
 
 env:
-  PYTHON_VERSION: "3.10"
   PYTHON_ARCHITECTURE: "x64"
+  PYTHON_VERSION: "3.10"
 
 permissions:
   id-token: write
