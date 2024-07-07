@@ -6,9 +6,6 @@ on: [workflow_dispatch]
 env:
   PYTHON_VERSION: "3.10"
   PYTHON_ARCHITECTURE: "x64"
-  # AZURE_RESOURCE_GROUP_NAME: "azurerg"
-  # AZURE_RESOURCE_NAME: "azurewebapp"
-  # AZURE_RESOURCE_DNS_NAME: "https://domain.com"
 
 permissions:
   id-token: write
