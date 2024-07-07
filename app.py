@@ -3,6 +3,9 @@ import datetime
 import io
 import json
 import os
+import shutil
+import tempfile
+from io import BytesIO
 from pickle import load
 
 import numpy as np
@@ -12,11 +15,15 @@ import uvicorn
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
+from PyPDF2 import PdfReader, PdfWriter
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 
 load_dotenv(find_dotenv())
 app = FastAPI()
@@ -197,15 +204,118 @@ async def post_mlwklsbrush(user_input: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/mlwklsgenerate", response_class=JSONResponse)
+@app.post("/mlwklsgenerate")
 async def post_mlwklsgenerate(user_input: dict):
+    max_width = 492
+    input_pdf_path = "input_pdf.pdf"
+    output_pdf_path = "output_pdf_with_text.pdf"
+    korean_font_path = "static/font/font.ttf"
+    pdfmetrics.registerFont(TTFont("gulim", korean_font_path))
     try:
-        updated_comment = user_input
-        return {"updatedComment": updated_comment}
-    except KeyError as e:
-        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
+        student_name = user_input["studentName"]
+        grade = int(user_input["grade"])
+        attendance = user_input["attendance"]
+        behaviour = user_input["behaviour"]
+        effort = user_input["effort"]
+        communucation_skills = "\n".join(
+            f"- {skill.split(']')[1]}" for skill in user_input["communicationSkills"]
+        )
+        understanding_skills = "\n".join(
+            f"- {skill.split(']')[1]}" for skill in user_input["understandingSkills"]
+        )
+        overall_comment = user_input["overallComment"]
+        src_path = "static/pdf"
+        dst_path = os.path.join("/tmp", student_name)
+        if not os.path.exists(dst_path):
+            os.mkdir(dst_path)
+        for item in os.listdir(src_path):
+            item_path = os.path.join(src_path, item)
+            if os.path.isdir(item_path):
+                shutil.copytree(item_path, os.path.join(dst_path, item))
+            else:
+                shutil.copy2(item_path, dst_path)
+
+        pdf_reader = PdfReader(os.path.join(dst_path, input_pdf_path))
+        pdf_writer = PdfWriter()
+
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            packet = BytesIO()
+            c = canvas.Canvas(packet)
+            c.setFont("gulim", 11)
+
+            c.drawString(155, 704, student_name)
+
+            grade_text = f"{'Year' if grade else ''} {grade if grade else 'Prep'}"
+            c.drawString(390, 704, grade_text)
+
+            c.setFontSize(9)
+            text_y = 652
+            for line in communucation_skills.split("\n"):
+                c.drawString(57, text_y, line)
+                text_y -= 11
+
+            text_y = 480
+            for line in understanding_skills.split("\n"):
+                c.drawString(57, text_y, line)
+                text_y -= 11
+
+            text_y = 305
+            words = overall_comment.split()
+            line = ""
+            for word in words:
+                test_line = line + word + " "
+                width = c.stringWidth(test_line, "gulim", 9)
+                if width <= max_width:
+                    line = test_line
+                else:
+                    c.drawString(57, text_y, line.strip())
+                    text_y -= 11
+                    line = word + " "
+            if line:
+                c.drawString(57, text_y, line.strip())
+
+            c.setFontSize(10)
+            for score, y in zip([attendance, behaviour, effort], [119, 102, 84]):
+                if score == "0":
+                    text_x = 167
+                elif score == "1":
+                    text_x = 253
+                elif score == "2":
+                    text_x = 337
+                elif score == "3":
+                    text_x = 423
+                else:
+                    text_x = 509
+                c.drawString(text_x, y, "X")
+
+            c.save()
+            packet.seek(0)
+            modified_page = PdfReader(packet).pages[0]
+            page.merge_page(modified_page)
+            pdf_writer.add_page(page)
+
+        output_path = os.path.join(dst_path, output_pdf_path)
+        with open(output_path, "wb") as output_file:
+            pdf_writer.write(output_file)
+
+        if os.path.exists(output_path):
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                tmp_file.write(open(output_path, "rb").read())
+
+            return FileResponse(
+                tmp_file.name, media_type="application/pdf", filename="report.pdf"
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Failed to generate PDF")
+
+    except ValueError as e:
+        return HTTPException(
+            status_code=400,
+            detail=f"Invalid input, please provide a valid user_input: {e}",
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return HTTPException(status_code=500, detail=f"Error: {e}")
 
 
 if __name__ == "__main__":
