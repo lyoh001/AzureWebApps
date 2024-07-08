@@ -18,11 +18,19 @@ import uvicorn
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import (
+    FileResponse,
+    HTMLResponse,
+    JSONResponse,
+    StreamingResponse,
+)
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from langchain.prompts import ChatPromptTemplate
+from langchain.schema import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import AzureChatOpenAI
+from pydantic import BaseModel
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -45,6 +53,10 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+
+class QuestionRequest(BaseModel):
+    question: str
 
 
 @app.get("/status")
@@ -417,6 +429,31 @@ async def post_mltelecom(user_input: dict):
 @app.get("/mlvmaudit", response_class=HTMLResponse)
 async def get_mlvmaudit(request: Request):
     return templates.TemplateResponse("mlvmaudit.html", {"request": request})
+
+
+@app.get("/ollama", response_class=HTMLResponse)
+async def get_ollama(request: Request):
+    return templates.TemplateResponse("ollama.html", {"request": request})
+
+
+@app.post("/ollama")
+async def post_ollama(request: QuestionRequest):
+    llm = AzureChatOpenAI(
+        azure_deployment="gpt-4o",
+        model="gpt-4o",
+        temperature=0,
+        streaming=True,
+    )
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "You are a helpful assistant."),
+            ("human", "{question}"),
+        ]
+    )
+    output_parser = StrOutputParser()
+    llm_chain = prompt | llm | output_parser
+    stream = await llm_chain.ainvoke({"question": request.question})
+    return StreamingResponse(stream, media_type="application/octet-stream")
 
 
 @app.get("/wkls", response_class=HTMLResponse)
