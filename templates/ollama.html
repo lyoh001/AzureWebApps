@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Pi GenAI Stack</title>
+  <title>Ollama UI</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -21,60 +21,31 @@
 </head>
 
 <body>
-  <div class="container">
-    <section class="hero is-medium">
-      <div class="hero-body">
-        <p class="title is-1">
-          GenAI Stack 🦙🦜🔗
-        </p>
-        <p class="subtitle is-3">
-          Propulsed by 🐳 Compose & LangChain
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <div class="container">
-    <div class="field">
-      <label class="label">Message</label>
-      <div class="control">
-        <textarea id="txt_prompt" class="textarea" placeholder="Type your question here"></textarea>
-      </div>
+  <div class="chat-container">
+    <div class="sidebar">
+      <h1 class="app-title">🦜 Ollama UI</h1>
     </div>
-
-    <div class="content">
-      <div class="field is-grouped button-container">
-        <div class="control">
-          <button id="btn_submit" class="button is-primary">Submit</button>
-        </div>
-        <div class="control">
-          <button id="btn_stop" class="button is-secondary">Stop</button>
+    <div class="chat-content">
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-input-container">
+        <textarea id="txt_prompt" class="chat-input" placeholder="Type your question here"></textarea>
+        <div class="button-container">
+          <button id="btn_submit" class="button submit-button">Submit</button>
+          <button id="btn_stop" class="button stop-button">Stop</button>
         </div>
       </div>
-    </div>
-
-    <div class="content">
-      <article class="message is-dark">
-        <div class="message-header">
-          <p>🤖 Answer:</p>
-        </div>
-        <div id="txt_response" class="message-body">
-        </div>
-      </article>
     </div>
   </div>
-
   <script type="module">
     let btnSubmit = document.querySelector("#btn_submit")
     let btnStop = document.querySelector("#btn_stop")
     let txtPrompt = document.querySelector("#txt_prompt")
-    let txtResponse = document.querySelector("#txt_response")
-
+    let chatMessages = document.querySelector("#chat-messages")
     let aborter = new AbortController()
-
     btnSubmit.addEventListener("click", async _ => {
       let responseText = ""
       try {
+        addMessageToChat('user', txtPrompt.value)
         const response = await fetch("/ollama", {
           method: "POST",
           headers: {
@@ -85,7 +56,7 @@
           }),
           signal: aborter.signal
         })
-
+        const aiMessageContainer = addMessageToChat('ai', '')
         const reader = response.body.getReader()
         while (true) {
           const { done, value } = await reader.read()
@@ -96,7 +67,7 @@
           const decodedValue = new TextDecoder().decode(value)
           console.log(decodedValue)
           responseText = responseText + decodedValue
-          txtResponse.innerHTML = markdownit({
+          aiMessageContainer.innerHTML = markdownit({
             highlight: function (str, lang) {
               if (lang && Prism.languages[lang]) {
                 try {
@@ -120,10 +91,21 @@
         }
       }
     })
-
     btnStop.addEventListener("click", async _ => {
       aborter.abort()
     })
+    function addMessageToChat(sender, content) {
+      const messageDiv = document.createElement('div')
+      messageDiv.classList.add('chat-message', sender)
+      messageDiv.innerHTML = `
+        <div class="message-content">
+          ${content}
+        </div>
+      `
+      chatMessages.appendChild(messageDiv)
+      chatMessages.scrollTop = chatMessages.scrollHeight
+      return messageDiv.querySelector('.message-content')
+    }
   </script>
 </body>
 
