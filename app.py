@@ -452,8 +452,12 @@ async def post_ollama(request: QuestionRequest):
     )
     output_parser = StrOutputParser()
     llm_chain = prompt | llm | output_parser
-    stream = await llm_chain.ainvoke({"question": request.question})
-    return StreamingResponse(stream, media_type="application/octet-stream")
+
+    async def token_stream():
+        async for chunk in llm_chain.astream({"question": request.question}):
+            yield chunk
+
+    return StreamingResponse(token_stream(), media_type="text/event-stream")
 
 
 @app.get("/wkls", response_class=HTMLResponse)
