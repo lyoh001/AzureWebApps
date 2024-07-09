@@ -439,10 +439,9 @@ async def get_ollama(request: Request):
 @app.post("/ollama")
 async def post_ollama(request: QuestionRequest):
     llm = AzureChatOpenAI(
-        azure_deployment="gpt-4o",
-        model="gpt-4o",
+        azure_deployment=os.environ["OPENAI_DEPLOYMENT_NAME"],
+        model=os.environ["OPENAI_MODEL_NAME"],
         temperature=0,
-        streaming=True,
     )
     prompt = ChatPromptTemplate.from_messages(
         [
