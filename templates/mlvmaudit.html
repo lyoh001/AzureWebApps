@@ -1,24 +1,10 @@
 <html>
-
 <head>
     <link href="../static/css/mlvmaudit.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Virtual Machine Audit</title>
 </head>
-
-<body onload="load()">
-    <script>
-        function load() {
-            var http = new XMLHttpRequest();
-            http.open("POST", "api/mlload", true);
-            http.setRequestHeader("Content-Type", "application/json");
-            http.onreadystatechange = function () {
-                var response = http.responseText
-                document.getElementById("prediction").innerHTML = "Ready.";
-            }
-            http.send();
-        }
-    </script>
+<body>
     <header id="dashboard">
         <h1><b>VIRTUAL MACHINE</b> AUDIT</h1>
         <hr>
