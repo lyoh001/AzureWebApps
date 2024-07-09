@@ -1,8 +1,8 @@
 :root {
   --primary-color: #4a90e2;
   --secondary-color: #f5a623;
-  --background-color: #f9f9f9;
-  --text-color: #333;
+  --background-color: #1a1a1a;
+  --text-color: #f0f0f0;
   --border-radius: 8px;
 }
 
@@ -24,30 +24,29 @@ body {
 .header {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
-  padding: 40px 0;
+  padding: 10px 0;
   text-align: center;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header__title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .header__subtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   opacity: 0.8;
 }
-
 
 .main {
   margin-top: 40px;
 }
 
 .question {
-  background-color: white;
+  background-color: #2a2a2a;
   border-radius: var(--border-radius);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -59,15 +58,17 @@ body {
   max-width: 100%;
   height: 150px;
   padding: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   border-radius: var(--border-radius);
   font-size: 1rem;
   resize: vertical;
   box-sizing: border-box;
+  background-color: #333;
+
 }
 
 .question__buttons {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   gap: 10px;
 }
@@ -101,7 +102,7 @@ body {
 }
 
 .answer__message {
-  background-color: white;
+  background-color: #2a2a2a;
   border-radius: var(--border-radius);
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -222,7 +223,6 @@ body {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-
 .button:focus,
 .question__textarea:focus {
   outline: 3px solid var(--primary-color);
@@ -257,14 +257,33 @@ body {
     --text-color: #f0f0f0;
   }
 
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  .header {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  }
+
   .question,
   .answer__message {
     background-color: #2a2a2a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 
   .question__textarea {
     background-color: #333;
     color: #f0f0f0;
     border-color: #444;
+  }
+
+  .button {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .hljs {
+    background: #2a2a2a;
+    color: #f0f0f0;
   }
 }
