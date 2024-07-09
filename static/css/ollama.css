@@ -108,19 +108,48 @@ body {
 }
 
 .answer__header {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
   margin-bottom: 20px;
 }
 
 .answer__title {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--primary-color);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  position: relative;
+}
+
+.answer__title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.answer__message:hover .answer__title::after {
+  transform: scaleX(1);
 }
 
 .answer__body {
   font-size: 1rem;
   line-height: 1.8;
+}
+
+.answer__icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('../icons/ollama.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
 .hljs {
