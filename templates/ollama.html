@@ -1,58 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Ollama UI</title>
-  <meta name="description" content="">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta charset="utf-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Ollama UI - Propulsed by Docker Compose & LangChain">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Ollama UI</title>
   <link rel="stylesheet" href="../static/css/ollama.css">
   <script src="../static/js/markdown-it.min.js"></script>
 </head>
 
 <body>
   <div class="container">
-    <section class="hero is-medium">
-      <div class="hero-body">
-        <p class="title is-1">
-          Ollama UI 🦙🦜🔗
-        </p>
-        <p class="subtitle is-3">
-          Propulsed by 🐳 Compose & LangChain
-        </p>
+    <header class="header header--medium">
+      <div class="header__content">
+        <h1 class="header__title">Ollama UI 🦙🦜🔗</h1>
+        <p class="header__subtitle">Propulsed by 🐳 Compose & LangChain</p>
       </div>
-    </section>
-  </div>
-  <div class="container">
-    <div class="field">
-      <label class="label">Message</label>
-      <div class="control">
-        <textarea id="txt_prompt" class="textarea" placeholder="Type your question here"></textarea>
-      </div>
-    </div>
-    <div class="content">
-      <div class="field is-grouped">
-        <div class="control">
-          <button id="btn_submit" class="button is-link">Submit</button>
+    </header>
+    <main class="main">
+      <section class="question">
+        <div class="question__field">
+          <textarea id="txt_prompt" class="question__textarea" placeholder="Type your question here"></textarea>
         </div>
-        <div class="control">
-          <button id="btn_stop" class="button is-link is-light">Stop</button>
+        <div class="question__buttons">
+          <button id="btn_submit" class="button button--primary">Submit</button>
+          <button id="btn_stop" class="button button--secondary">Stop</button>
         </div>
-      </div>
-    </div>
-    <div class="content">
-      <article class="message is-dark">
-        <div class="message-header">
-          <p>🤖 Answer:</p>
-        </div>
-        <div id="txt_response" class="message-body">
-        </div>
-      </article>
-    </div>
+      </section>
+      <section class="answer">
+        <article class="answer__message message--dark">
+          <header class="answer__header">
+            <h2 class="answer__title">🤖 Answer:</h2>
+          </header>
+          <div id="txt_response" class="answer__body"></div>
+        </article>
+      </section>
+    </main>
   </div>
   <script type="module">
     let btnSubmit = document.querySelector("#btn_submit")
