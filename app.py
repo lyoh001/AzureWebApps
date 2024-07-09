@@ -445,7 +445,7 @@ async def post_ollama(request: QuestionRequest):
     )
     prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", "You are a helpful assistant."),
+            ("system", "You are a helpful assistant. Always format your response."),
             ("human", "{question}"),
         ]
     )

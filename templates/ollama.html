@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="description" content="Ollama UI - Propulsed by Docker Compose & LangChain">
+  <meta name="description" content="Ollama UI">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Ollama UI</title>
   <link rel="stylesheet" href="../static/css/ollama.css">
   <script src="../static/js/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 </head>
 
 <body>
@@ -48,6 +49,18 @@
     let txtPrompt = document.querySelector("#txt_prompt")
     let txtResponse = document.querySelector("#txt_response")
     let aborter = new AbortController()
+    const md = markdownit({
+      highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return '<pre class="hljs"><code>' +
+              hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+              '</code></pre>';
+          } catch (__) { }
+        }
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+      }
+    });
     btnSubmit.addEventListener("click", async _ => {
       let responseText = ""
       try {
@@ -66,12 +79,13 @@
           const { done, value } = await reader.read()
           if (done) {
             txtPrompt.value = ""
+            hljs.highlightAll();
             return
           }
           const decodedValue = new TextDecoder().decode(value)
           console.log(decodedValue)
           responseText = responseText + decodedValue
-          txtResponse.innerHTML = markdownit().render(responseText)
+          txtResponse.innerHTML = md.render(responseText)
         }
       } catch (error) {
         if (error.name === 'AbortError') {

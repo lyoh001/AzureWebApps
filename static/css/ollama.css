@@ -21,7 +21,6 @@ body {
   padding: 20px;
 }
 
-
 .header {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
@@ -97,7 +96,6 @@ body {
   transform: translateY(-2px);
 }
 
-
 .answer {
   margin-top: 40px;
 }
@@ -125,29 +123,61 @@ body {
   line-height: 1.8;
 }
 
-
-@media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
-
-  .header__title {
-    font-size: 2rem;
-  }
-
-  .header__subtitle {
-    font-size: 1rem;
-  }
-
-  .question__buttons {
-    flex-direction: column;
-  }
-
-  .button {
-    width: 100%;
-  }
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+  color: var(--primary-color);
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-section,
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-addition,
+.hljs-tag,
+.hljs-quote,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: var(--secondary-color);
+}
+
+.hljs-comment,
+.hljs-meta,
+.hljs-deletion,
+.hljs-subst {
+  color: #888;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
 
 @keyframes fadeIn {
   from {
@@ -170,6 +200,27 @@ body {
   outline-offset: 2px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header__title {
+    font-size: 2rem;
+  }
+
+  .header__subtitle {
+    font-size: 1rem;
+  }
+
+  .question__buttons {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
