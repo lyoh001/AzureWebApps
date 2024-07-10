@@ -3,6 +3,7 @@ import datetime
 import io
 import json
 import os
+import re
 import shutil
 import tempfile
 import warnings
@@ -12,6 +13,7 @@ from pickle import load
 import cv2
 import numpy as np
 import pandas as pd
+import requests
 import scipy.stats as stat
 import tflite_runtime.interpreter as tflite
 import uvicorn
@@ -26,10 +28,15 @@ from fastapi.responses import (
 )
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from langchain.agents import Tool, create_json_chat_agent
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.utilities.bing_search import BingSearchAPIWrapper
+from langchain_core.agents import AgentFinish
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import AzureChatOpenAI
+from langgraph.prebuilt.tool_executor import ToolExecutor
 from pydantic import BaseModel
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfbase import pdfmetrics
@@ -53,6 +60,50 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
+SYSTEM_PREFIX = ""
+SYSTEM_SUFFIX = ""
+HUMAN_PREFIX = ""
+HUMAN_SUFFIX = ""
+SYSTEM_MESSAGE = """Assistant is a large language model trained by OpenAI.
+
+Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+
+Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
+
+Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.
+
+
+TOOLS:
+You can use tools to look up information, which may be useful in responding the user's original question. Here are the descriptions of the tools.
+{tools}
+
+
+RESPONSE FORMAT INSTRUCTIONS:
+When responding, please output your response in one of the two specified formats.
+
+*Format 1*
+Use this format when you need to search for information using a tool. The Markdown code snippet should follow this schema.
+
+```json
+{{
+    "action": string, (Name of a tool which must be one of {tool_names})
+    "action_input": string (A parameter that needs to be input into the tool)
+}}
+```
+
+*Format 2*
+Use this format if you can answer the user's original question. The Markdown code snippet should follow this schema.
+
+```json
+{{
+    "action": "Final Answer",
+    "action_input": string (The solution)
+}}
+```
+
+
+USER'S INPUT:
+Here is the user's input. Remember to respond with the markdown code snippet of JSON blob with a single action, and NOTHING else."""
 
 
 class QuestionRequest(BaseModel):
@@ -443,17 +494,126 @@ async def post_ollama(request: QuestionRequest):
         model=os.environ["OPENAI_MODEL_NAME"],
         temperature=0,
     )
+    tools = [
+        Tool(
+            name="Search",
+            func=lambda prompt: BingSearchAPIWrapper(
+                bing_search_url=os.environ["BING_SEARCH_URL"],
+                bing_subscription_key=os.environ["BING_SUBSCRIPTION_KEY"],
+                k=10,
+            ).run(prompt),
+            description="Useful for when you need to answer a question about a current topic, country, person, events or the state of the world.",
+        ),
+        Tool(
+            name="Webscraper",
+            func=lambda url: re.sub(
+                r"\s+",
+                " ",
+                "".join(doc.page_content for doc in WebBaseLoader([url]).load()),
+            ).strip(),
+            description="Useful for when you need to retrieve the content from a url.",
+        ),
+        Tool(
+            name="API",
+            func=lambda url: requests.get(url).text,
+            description="Useful for when you need to make an API call using a url.",
+        ),
+        Tool(
+            name="Weather",
+            func=lambda city: requests.get(
+                f"https://api.openweathermap.org/data/2.5/weather?q={'melbourne,au' if city.lower() in ['melbourne', 'city'] else city}&APPID={os.environ['WEATHER_API_KEY']}&units=metric"
+            ).text,
+            description="Useful for when you need to answer a question about the weather for a specific city.",
+        ),
+    ]
     prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", "You are a helpful assistant. Always format your response."),
-            ("human", "{question}"),
+            ("system", SYSTEM_PREFIX + SYSTEM_MESSAGE + SYSTEM_SUFFIX),
+            MessagesPlaceholder("chat_history", optional=True),
+            (
+                "human",
+                HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX,
+            ),
+            MessagesPlaceholder("agent_scratchpad"),
         ]
     )
-    output_parser = StrOutputParser()
-    llm_chain = prompt | llm | output_parser
+    agent_runnable = create_json_chat_agent(
+        llm, tools, prompt, stop_sequence=True, template_tool_response="{observation}"
+    )
+    try:
+        agent_action = agent_runnable.invoke(
+            {
+                "input": request.question,
+                "chat_history": [],
+                "agent_outcome": None,
+                "intermediate_steps": [],
+            }
+        )
+    except:
+        agent_action = {
+            "agent_outcome": AgentFinish(
+                return_values={"output": ""},
+                log="",
+            )
+        }
+    print(
+        f"Use Tools? {chr(27)+'[91m'+chr(27)+'[1m'+'No'+chr(27)+'[0m' if isinstance(agent_action, AgentFinish) else chr(27)+'[92m'+chr(27)+'[1m'+'Yes'+chr(27)+'[0m'}"
+    )
+    if isinstance(agent_action, AgentFinish):
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    SYSTEM_PREFIX
+                    + "You are a helpful assistant. Always format your response."
+                    + SYSTEM_SUFFIX,
+                ),
+                ("human", HUMAN_PREFIX + "{question}" + HUMAN_SUFFIX),
+            ]
+        )
+    else:
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    SYSTEM_PREFIX
+                    + f"You are a senior analyst with a knack for extracting meaningful insights from diverse data sets, regardless of the subject matter. Today, {datetime.date.today().strftime('%Y/%m/%d')}, your goal is to analyze gathered information to identify key facts and insights within a given context."
+                    + SYSTEM_SUFFIX,
+                ),
+                (
+                    "human",
+                    HUMAN_PREFIX
+                    + "Review the provided text and create a concise report in well-formated structure capturing the essential information, focusing on answering question. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview the content. Here is the gathered information, delimited by triple backticks. ```{question}```"
+                    + HUMAN_SUFFIX,
+                ),
+            ]
+        )
+        try:
+            print(
+                f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
+            )
+            output = ToolExecutor(tools).invoke(agent_action)
+            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+        except:
+            print(
+                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed.'+chr(27)+'[0m'}"
+            )
+            output = ""
+            print(
+                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Returning the empty output.'+chr(27)+'[0m'}"
+            )
+    llm_chain = prompt | llm | StrOutputParser()
 
     async def token_stream():
-        async for chunk in llm_chain.astream({"question": request.question}):
+        async for chunk in llm_chain.astream(
+            {
+                "question": (
+                    request.question
+                    if isinstance(agent_action, AgentFinish)
+                    else f"Question: {request.question}\nAnswer: {output}"
+                )
+            }
+        ):
             yield chunk
 
     return StreamingResponse(token_stream(), media_type="text/event-stream")
@@ -491,7 +651,7 @@ async def post_mlwklsbrush(user_input: dict):
         llm = AzureChatOpenAI(
             azure_deployment=os.environ["OPENAI_DEPLOYMENT_NAME"],
             model=os.environ["OPENAI_MODEL_NAME"],
-            temperature=float(os.environ["TEMPERATURE"]),
+            temperature=1,
         )
         prompt = ChatPromptTemplate.from_messages(
             [

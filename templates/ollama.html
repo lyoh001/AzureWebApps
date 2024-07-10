@@ -21,7 +21,7 @@
     <header class="header header--medium">
       <div class="header__content">
         <h1 class="header__title">Ollama UI 🦙🦜🔗</h1>
-        <p class="header__subtitle">Propulsed by 🐳 Compose & LangChain</p>
+        <p class="header__subtitle">Powered by a Multi-AI Agents System</p>
       </div>
     </header>
     <main class="main">
@@ -64,6 +64,9 @@
     });
     btnSubmit.addEventListener("click", async _ => {
       let responseText = ""
+      txtResponse.innerHTML = "";
+      btnSubmit.classList.add('button--loading');
+      btnSubmit.disabled = true;
       try {
         const response = await fetch("/ollama", {
           method: "POST",
@@ -81,6 +84,8 @@
           if (done) {
             txtPrompt.value = ""
             hljs.highlightAll();
+            btnSubmit.classList.remove('button--loading');
+            btnSubmit.disabled = false;
             return
           }
           const decodedValue = new TextDecoder().decode(value)
@@ -96,10 +101,14 @@
         } else {
           console.log("😡", error)
         }
+        btnSubmit.classList.remove('button--loading');
+        btnSubmit.disabled = false;
       }
     })
     btnStop.addEventListener("click", async _ => {
       aborter.abort()
+      btnSubmit.classList.remove('button--loading');
+      btnSubmit.disabled = false;
     })
   </script>
 </body>

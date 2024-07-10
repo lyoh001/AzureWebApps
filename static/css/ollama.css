@@ -78,11 +78,13 @@ body {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
+  position: relative;
 }
 
 .button--primary {
   background-color: var(--primary-color);
   color: white;
+  min-width: 100px;
 }
 
 .button--secondary {
@@ -93,6 +95,22 @@ body {
 .button:hover {
   opacity: 0.9;
   transform: translateY(-2px);
+}
+
+.button--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top: 2px solid transparent;
+  animation: spin 1s linear infinite;
 }
 
 .answer {
@@ -193,6 +211,16 @@ body {
 
 .hljs-emphasis {
   font-style: italic;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
