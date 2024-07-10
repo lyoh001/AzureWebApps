@@ -568,9 +568,10 @@ async def post_ollama(request: QuestionRequest):
                     + "You are a helpful assistant. Always format your response."
                     + SYSTEM_SUFFIX,
                 ),
-                ("human", HUMAN_PREFIX + "{question}" + HUMAN_SUFFIX),
+                ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
             ]
         )
+        question = request.question
     else:
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -583,7 +584,7 @@ async def post_ollama(request: QuestionRequest):
                 (
                     "human",
                     HUMAN_PREFIX
-                    + "Review the provided text and create a concise report in well-formated structure capturing the essential information, focusing on answering question. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview the content. Here is the gathered information, delimited by triple backticks. ```{question}```"
+                    + "Review the provided text and create a concise report in well-formated structure capturing the essential information, focusing on answering question. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview the content. Here is the gathered information, delimited by triple backticks. ```{input}```"
                     + HUMAN_SUFFIX,
                 ),
             ]
@@ -602,18 +603,12 @@ async def post_ollama(request: QuestionRequest):
             print(
                 f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Returning the empty output.'+chr(27)+'[0m'}"
             )
+        question = f"Question: {request.question}\nAnswer: {output}"
+
     llm_chain = prompt | llm | StrOutputParser()
 
     async def token_stream():
-        async for chunk in llm_chain.astream(
-            {
-                "question": (
-                    request.question
-                    if isinstance(agent_action, AgentFinish)
-                    else f"Question: {request.question}\nAnswer: {output}"
-                )
-            }
-        ):
+        async for chunk in llm_chain.astream({"input": question}):
             yield chunk
 
     return StreamingResponse(token_stream(), media_type="text/event-stream")
