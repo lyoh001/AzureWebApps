@@ -45,7 +45,7 @@ jobs:
         with:
           name: python-app
           path: |
-            .
+            ./
             !venv/
 
   deploy:
@@ -90,4 +90,4 @@ jobs:
     steps:
       - name: Delete artifacts
         run: |
-          rm -rf python-app
+          rm -rf ./*
