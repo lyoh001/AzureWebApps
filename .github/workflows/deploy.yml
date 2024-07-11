@@ -41,7 +41,7 @@ jobs:
           flake8 app.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: python-app
           path: |
@@ -71,7 +71,7 @@ jobs:
             az webapp config appsettings set --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ secrets.AZURE_RESOURCE_NAME }} --settings WEBSITE_WEBDEPLOY_USE_SCM=true
 
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: python-app
           path: .
@@ -89,5 +89,6 @@ jobs:
     if: always()
     steps:
       - name: Delete artifacts
-        run: |
-          rm -rf ./*
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: python-app
