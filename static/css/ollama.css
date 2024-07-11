@@ -82,6 +82,7 @@ body {
   transition: var(--transition);
   flex: 1;
   max-width: 150px;
+  position: relative;
 }
 
 .button--primary {
