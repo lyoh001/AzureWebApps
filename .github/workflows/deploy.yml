@@ -82,3 +82,12 @@ jobs:
         with:
           app-name: ${{ secrets.AZURE_RESOURCE_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPPS_PUBLISH_PROFILE }}
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    steps:
+      - name: Delete artifacts
+        run: |
+          rm -rf python-app
