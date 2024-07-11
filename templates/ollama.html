@@ -2,56 +2,70 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="description" content="Ollama UI">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Ollama UI</title>
-  <link rel="icon" href="../static/icons/ollama.png">
-  <link rel="stylesheet" href="../static/css/ollama.css">
-  <script src="../static/js/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="../static/js/markdown-it.min.js"></script>
+  <link rel="stylesheet" href="../static/css/ollama.css">
+  <link rel="icon" href="../static/icons/ollama.png">
+  <title>Ollama UI</title>
 </head>
 
 <body>
-  <div class="container">
-    <header class="header header--medium">
-      <div class="header__content">
-        <h1 class="header__title">Ollama UI 🦙🦜🔗</h1>
-        <p class="header__subtitle">Powered by Multi-AI Agents System</p>
+  <header id="header">
+    <nav class="container">
+      <div class="logo">
+        <h1><span class="highlight">Ollama</span> Chatbot</h1>
+        <p class="subheader">Ollama Chatbot UI</p>
       </div>
-    </header>
-    <main class="main">
-      <section class="question">
-        <div class="question__field">
-          <textarea id="txt_prompt" class="question__textarea" placeholder="Type your question here"></textarea>
-        </div>
-        <div class="question__buttons">
-          <div class="question__buttons-container">
-            <button id="btn_submit" class="button button--primary">Submit</button>
-            <button id="btn_stop" class="button button--secondary">Stop</button>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="#hero">Name</a></li>
+        <li><a href="#form-section">Metrics</a></li>
+        <li><a href="#communicationCards">Communication</a></li>
+        <li><a href="#understandingCards">Understanding</a></li>
+        <li><a href="#comment-section">Comment</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="app relative">
+    <div class="main-content">
+      <div class="content-wrapper">
+        <div class="chat-content">
+          <div class="chat-messages" id="chat-messages">
+            <h2>Let's Generate Comprehensive Reports</h2>
+            <p>Effortlessly create detailed student reports with AI assistance.</p>
           </div>
         </div>
-      </section>
-      <section class="answer">
-        <article class="answer__message message--dark">
-          <header class="answer__header">
-            <h2 class="answer__title"><span class="answer__icon"></span>Answer</h2>
-          </header>
-          <div id="txt_response" class="answer__body"></div>
-        </article>
-      </section>
-    </main>
+      </div>
+      <div class="input-area">
+        <div class="input-wrapper">
+          <form class="input-form" id="input-form">
+            <div class="input-container">
+              <textarea id="chat-textarea" class="chat-input" placeholder="Send a message" rows="1"></textarea>
+              <div class="send-button-wrapper">
+                <button id="send-button" class="send-button" type="submit">
+                  <div class="send-icon">
+                    <div class="arrow-up"></div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="disclaimer">
+            LLMs can make mistakes. Verify important information.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module">
-    let btnSubmit = document.querySelector("#btn_submit")
-    let btnStop = document.querySelector("#btn_stop")
-    let txtPrompt = document.querySelector("#txt_prompt")
-    let txtResponse = document.querySelector("#txt_response")
-    let aborter = new AbortController()
+    let btnSubmit = document.querySelector("#send-button");
+    let txtPrompt = document.querySelector("#chat-textarea");
+    let chatMessages = document.querySelector("#chat-messages");
+    let aborter = new AbortController();
     const md = markdownit({
       highlight: function (str, lang) {
         if (lang && hljs.getLanguage(lang)) {
@@ -65,8 +79,7 @@
       }
     });
     btnSubmit.addEventListener("click", async _ => {
-      let responseText = ""
-      txtResponse.innerHTML = "";
+      let responseText = "";
       btnSubmit.classList.add('button--loading');
       btnSubmit.disabled = true;
       try {
@@ -75,43 +88,41 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            question: txtPrompt.value
-          }),
+          body: JSON.stringify({ question: txtPrompt.value }),
           signal: aborter.signal
-        })
-        const reader = response.body.getReader()
+        });
+        const reader = response.body.getReader();
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await reader.read();
           if (done) {
-            txtPrompt.value = ""
+            txtPrompt.value = "";
             hljs.highlightAll();
             btnSubmit.classList.remove('button--loading');
             btnSubmit.disabled = false;
-            return
+            return;
           }
-          const decodedValue = new TextDecoder().decode(value)
-          console.log(decodedValue)
-          responseText = responseText + decodedValue
-          txtResponse.innerHTML = md.render(responseText)
+          const decodedValue = new TextDecoder().decode(value);
+          console.log(decodedValue);
+          responseText = responseText + decodedValue;
+          chatMessages.innerHTML = md.render(responseText);
         }
       } catch (error) {
         if (error.name === 'AbortError') {
-          console.log("✋", "Fetch request aborted")
-          txtPrompt.value = ""
-          aborter = new AbortController()
+          console.log("✋", "Fetch request aborted");
+          txtPrompt.value = "";
+          aborter = new AbortController();
         } else {
-          console.log("😡", error)
+          console.log("😡", error);
         }
         btnSubmit.classList.remove('button--loading');
         btnSubmit.disabled = false;
       }
-    })
+    });
     btnStop.addEventListener("click", async _ => {
       aborter.abort()
       btnSubmit.classList.remove('button--loading');
       btnSubmit.disabled = false;
-    })
+    });
   </script>
 </body>
 
