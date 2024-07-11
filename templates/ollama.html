@@ -22,11 +22,7 @@
         <i class="fas fa-bars"></i>
       </button>
       <ul class="nav-menu">
-        <li><a href="#hero">Name</a></li>
-        <li><a href="#form-section">Metrics</a></li>
-        <li><a href="#communicationCards">Communication</a></li>
-        <li><a href="#understandingCards">Understanding</a></li>
-        <li><a href="#comment-section">Comment</a></li>
+        <li><button id="reset-button">Reset</button></li>
       </ul>
     </nav>
   </header>
@@ -62,9 +58,10 @@
     </div>
   </div>
   <script type="module">
-    let btnSubmit = document.querySelector("#send-button");
-    let txtPrompt = document.querySelector("#chat-textarea");
-    let chatMessages = document.querySelector("#chat-messages");
+    const btnSubmit = document.querySelector("#send-button");
+    const txtPrompt = document.querySelector("#chat-textarea");
+    const chatMessages = document.querySelector("#chat-messages");
+    const resetButton = document.querySelector("#reset-button");
     let aborter = new AbortController();
     const md = markdownit({
       highlight: function (str, lang) {
@@ -78,7 +75,8 @@
         return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
       }
     });
-    btnSubmit.addEventListener("click", async _ => {
+    async function sendMessage(event) {
+      event.preventDefault();
       let responseText = "";
       btnSubmit.classList.add('button--loading');
       btnSubmit.disabled = true;
@@ -103,7 +101,7 @@
           }
           const decodedValue = new TextDecoder().decode(value);
           console.log(decodedValue);
-          responseText = responseText + decodedValue;
+          responseText += decodedValue;
           chatMessages.innerHTML = md.render(responseText);
         }
       } catch (error) {
@@ -117,12 +115,20 @@
         btnSubmit.classList.remove('button--loading');
         btnSubmit.disabled = false;
       }
-    });
-    btnStop.addEventListener("click", async _ => {
-      aborter.abort()
+    }
+    function resetChat() {
+      chatMessages.innerHTML = `
+        <h2>Welcome to Ollama Chatbot</h2>
+        <p>Interact with our AI-powered chatbot to get instant responses.</p>
+      `;
+      txtPrompt.value = "";
+      aborter.abort();
+      aborter = new AbortController();
       btnSubmit.classList.remove('button--loading');
       btnSubmit.disabled = false;
-    });
+    }
+    document.querySelector("#input-form").addEventListener("submit", sendMessage);
+    resetButton.addEventListener("click", resetChat);
   </script>
 </body>
 
