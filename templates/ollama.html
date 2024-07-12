@@ -6,6 +6,7 @@ Your task is to:
 
 - I would like to . My CSS code below.
 
+
 You can generate a large, complex code block, but please take your time and think through each step carefully. Remember, your goal is to make the interface look as polished and professional as possible.
 Here is my HTML code that you can use when cross checking. Please output CSS code only.
 ------------------>
@@ -126,7 +127,12 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                     const decodedValue = new TextDecoder().decode(value);
                     console.log(decodedValue);
                     responseText += decodedValue;
-                    chatMessages.innerHTML = md.render(responseText);
+                    chatMessages.innerHTML = `
+                        <div class="chat-messages">
+                            <img src="../static/icons/ollama.png" alt="Ollama Icon" class="chat-icon">
+                            <div class="chat-text">${md.render(responseText)}</div>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 if (error.name === 'AbortError') {
