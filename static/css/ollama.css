@@ -255,22 +255,71 @@ blockquote {
     color: var(--text-color);
     resize: none;
     outline: none;
+    min-height: 40px;
 }
 
-.reset-button,
+/* Ensure proper spacing for button wrappers */
+.reset-button-wrapper,
+.send-button-wrapper {
+    display: flex;
+    align-items: center;
+}
+
 .send-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.send-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-color);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+.send-button.button--loading::before {
+    animation: spin 0.8s linear infinite;
+    opacity: 1;
+}
+
+.send-button.button--loading i {
+    opacity: 0;
+}
+
+.send-button, .reset-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
     background: none;
     border: none;
     cursor: pointer;
     font-size: 1.2rem;
     color: var(--accent-color);
-    transition: transform var(--transition-speed);
-    padding: 0.5rem;
+    transition: transform var(--transition-speed), opacity var(--transition-speed);
+    padding: 0;
 }
 
-.reset-button:hover,
-.send-button:hover {
+.send-button:hover, .reset-button:hover {
     transform: scale(1.1);
+}
+
+.send-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.send-button i, .reset-button i {
+    transition: opacity var(--transition-speed);
 }
 
 .disclaimer {
@@ -343,11 +392,10 @@ blockquote {
 
 @keyframes spin {
     0% {
-        transform: rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
-
     100% {
-        transform: rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 
@@ -394,12 +442,22 @@ blockquote {
         font-size: 1rem;
     }
 
+    .chat-input {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        min-height: 36px;
+    }
+
     .input-container {
         flex-wrap: nowrap;
     }
 
     .reset-button,
     .send-button {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+
         padding: 0.25rem;
     }
 }

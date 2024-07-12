@@ -149,8 +149,8 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
 
         function resetChat() {
             chatMessages.innerHTML = `
-                <h8>Welcome to Ollama Chatbot</h8>
-                <h9>Interact with our Multi AI Agent powered chatbot to get instant responses.</h9>
+                <p class="chat-header">Welcome to Ollama Chatbot</p>
+                <p class="chat-subheader">Interact with our Multi AI Agent powered chatbot to get instant responses.</p>
             `;
             txtPrompt.value = "";
             aborter.abort();
