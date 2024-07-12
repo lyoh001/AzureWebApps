@@ -20,7 +20,7 @@
 
 body {
     font-family: var(--font-family);
-    font-size: 16px;
+    font-size: 0.9rem;
     color: var(--text-color);
     background: var(--background-gradient);
     line-height: 1.6;
@@ -51,16 +51,16 @@ nav {
     padding: 1rem 0;
 }
 
-.logo h7 {
+.logo-header {
     font-size: 1.5rem;
     font-weight: 700;
 }
 
-.highlight {
+.logo-highlight {
     color: var(--accent-color);
 }
 
-.subheader {
+.logo-subheader {
     font-size: 0.8rem;
     color: var(--text-secondary);
     margin-top: 0rem;
@@ -112,7 +112,7 @@ nav {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding-top: 80px;
+    padding-top: 40px;
 }
 
 .main-content {
@@ -124,7 +124,7 @@ nav {
 .content-wrapper {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
 }
 
 .chat-content {
@@ -133,8 +133,8 @@ nav {
 }
 
 .chat-messages {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 400;
     font-family: var(--font-family);
     display: flex;
     flex-direction: column;
@@ -151,56 +151,39 @@ nav {
     margin-right: 10px;
 }
 
-h8,
-h9 {
+.chat-header,
+.chat-subheader {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
 }
 
-h8 {
+.chat-header {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--heading-color);
     margin-bottom: 1rem;
-    margin-top: 20rem;
+    margin-top: 10rem;
     background: linear-gradient(45deg, var(--accent-color), #6610f2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-h9 {
+.chat-subheader {
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }
 
-h1,
-h2,
-h3,
-h4 {
-    margin: 0.1rem 0 0.1rem;
-    font-weight: 500;
-}
-
 h1 {
-    font-size: 1.75rem;
+    font-size: 1.1rem;
 }
 
 h2 {
-    font-size: 1.5rem;
-}
-
-h3 {
-    font-size: 1.25rem;
-}
-
-h4 {
     font-size: 1rem;
 }
 
-p {
-    margin: 0.1rem 0;
-    line-height: 1.8;
+h3 {
+    font-size: 0.9rem;
 }
 
 a {
@@ -393,17 +376,21 @@ blockquote {
         display: block;
     }
 
+    .content-wrapper {
+        padding: 0.5rem 0.5rem;
+    }
+
     .chat-icon {
         width: 30px;
         height: 30px;
     }
 
-    h8 {
+    .chat-header {
         font-size: 2rem;
         margin-top: 7rem;
     }
 
-    h9 {
+    .chat-subheader {
         font-size: 1rem;
     }
 
