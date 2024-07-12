@@ -119,6 +119,7 @@ nav {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    padding-bottom: 80px;
 }
 
 .content-wrapper {
@@ -140,7 +141,7 @@ nav {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 280px);
     line-height: 1.8;
     padding: 1rem;
 }
@@ -221,6 +222,7 @@ blockquote {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1000;
 }
 
 .input-wrapper {
@@ -258,7 +260,6 @@ blockquote {
     min-height: 40px;
 }
 
-/* Ensure proper spacing for button wrappers */
 .reset-button-wrapper,
 .send-button-wrapper {
     display: flex;
@@ -294,7 +295,8 @@ blockquote {
     opacity: 0;
 }
 
-.send-button, .reset-button {
+.send-button,
+.reset-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -309,7 +311,8 @@ blockquote {
     padding: 0;
 }
 
-.send-button:hover, .reset-button:hover {
+.send-button:hover,
+.reset-button:hover {
     transform: scale(1.1);
 }
 
@@ -318,7 +321,8 @@ blockquote {
     opacity: 0.6;
 }
 
-.send-button i, .reset-button i {
+.send-button i,
+.reset-button i {
     transition: opacity var(--transition-speed);
 }
 
@@ -394,6 +398,7 @@ blockquote {
     0% {
         transform: translate(-50%, -50%) rotate(0deg);
     }
+
     100% {
         transform: translate(-50%, -50%) rotate(360deg);
     }
@@ -457,7 +462,6 @@ blockquote {
         width: 36px;
         height: 36px;
         font-size: 1rem;
-
         padding: 0.25rem;
     }
 }
