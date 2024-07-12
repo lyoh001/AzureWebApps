@@ -112,14 +112,14 @@ nav {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding-top: 40px;
+    padding-top: 55px;
 }
 
 .main-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding-bottom: 80px;
+    padding-bottom: 85px;
 }
 
 .content-wrapper {
@@ -143,7 +143,7 @@ nav {
     justify-content: flex-start;
     min-height: calc(100vh - 280px);
     line-height: 1.8;
-    padding: 1rem;
+    padding: 0.6rem;
 }
 
 .chat-icon {
@@ -164,7 +164,7 @@ nav {
     font-weight: 700;
     color: var(--heading-color);
     margin-bottom: 1rem;
-    margin-top: 10rem;
+    margin-top: 11rem;
     background: linear-gradient(45deg, var(--accent-color), #6610f2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -192,10 +192,6 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
 ul,
 ol {
     margin: 0.5rem 0 0.5rem 1.5rem;
@@ -206,6 +202,15 @@ pre {
     padding: 1rem;
     border-radius: 4px;
     overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+    max-width: 100%;
+}
+
+code {
+    display: inline-block;
+    min-width: 100%;
+    white-space: pre;
 }
 
 blockquote {
@@ -340,9 +345,12 @@ blockquote {
     margin: 1rem 0;
     overflow-x: auto;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.5;
     box-shadow: 0 2px 4px var(--shadow-color);
+    white-space: pre;
+    word-wrap: normal;
+    max-width: 95%;
 }
 
 .hljs-keyword,
@@ -481,7 +489,7 @@ blockquote {
 
     .chat-header {
         font-size: 2rem;
-        margin-top: 7rem;
+        margin-top: 9rem;
     }
 
     .chat-subheader {
@@ -494,6 +502,10 @@ blockquote {
         min-height: 36px;
     }
 
+    .chat-messages {
+        font-size: 0.8;
+    }
+
     .input-container {
         flex-wrap: nowrap;
     }
@@ -504,5 +516,9 @@ blockquote {
         height: 36px;
         font-size: 1rem;
         padding: 0.25rem;
+    }
+
+    .hljs {
+        max-width: 40%;
     }
 }
