@@ -295,6 +295,30 @@ h9 {
     font-style: italic;
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.chat-messages {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
 @media (max-width: 768px) {
     .nav-menu {
         display: none;
