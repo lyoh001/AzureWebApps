@@ -4,7 +4,7 @@ The following code provides a foundational HTML structure for a chatbot interfac
 
 Your task is to:
 
-1. Generate CSS code that enhances this app to be visually stunning, modern, stylish, and professional while maintaining a traditional chatbot layout style. You can copy the style from this sample CSS code below.
+- Generate CSS code that enhances this app to be visually stunning, modern, stylish, and professional while maintaining a traditional chatbot layout style. You can copy the style from this sample CSS code below.
 :root {
     --primary-color: #ffffff;
     --secondary-color: #f8f9fa;
@@ -705,19 +705,21 @@ main {
     }
 }
 
-2. Ensure the user input field is docked and remains fixed at the bottom of the screen, even when long messages are generated (i.e., it should not get pushed down with a page scroll).
+- Ensure the user input field is docked and remains fixed at the bottom of the screen, even when long messages are generated (i.e., it should not get pushed down with a page scroll).
 
-3. The main heading 'Welcome to Ollama Chatbot Interact with our AI-powered chatbot to get instant responses.' should be displayed in the middle, in the center of the screen with stunning, catchy style.
+- The main heading 'Welcome to Ollama Chatbot Interact with our AI-powered chatbot to get instant responses.' should be displayed in the middle, in the center of the screen with stunning, catchy style.
 
-4. chat message display pane should be blended with background with no shadow. (I would like a clean, minimalist style like Apple.com)
+- AI response message shuold be just displayed as normal chat message.
 
-5. Ensure 2 buttons (Reset and Submit buttons) should be positioned next to the user input field in a same row like this. (reset button) (input field) (send button)
+- chat message display pane should be blended with background with no shadow. (I would like a clean, minimalist style like Apple.com)
 
-6. Ensure hljs gets formatted for code syntax styling.
+- Ensure 2 buttons (Reset and Submit buttons) should be positioned next to the user input field in a same row.
 
-7. In mobile view, implement a hamburger menu for the navigation bar.
+- Ensure hljs gets formatted for code syntax styling.
 
-8. Ensure the design is responsive, providing a seamless experience across both desktop and mobile devices, and exudes an enterprise-level aesthetic.
+- In mobile view, implement a hamburger menu for the navigation bar.
+
+- Ensure the design is responsive, providing a seamless experience across both desktop and mobile devices, and exudes an enterprise-level aesthetic.
 
 You can generate a large, complex code block, but please take your time and think through each step carefully. Remember, your goal is to make the interface look as polished and professional as possible. Please output CSS code only.
 
@@ -777,12 +779,12 @@ Here is my HTML code:
                   <i class="fas fa-redo"></i>
               </div>
               </button>
-            </div>
-            <textarea id="chat-textarea" class="chat-input" placeholder="Send a message" rows="1"></textarea>
-            <div class="send-button-wrapper">
-              <button id="send-button" class="send-button" type="submit">
-                <i class="fas fa-paper-plane"></i>
-              </button>
+              <textarea id="chat-textarea" class="chat-input" placeholder="Send a message" rows="1"></textarea>
+              <div class="send-button-wrapper">
+                <button id="send-button" class="send-button" type="submit">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
             </div>
         </div>
         </form>
