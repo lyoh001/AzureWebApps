@@ -37,11 +37,19 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-menu">
-                <li><a href="#">Currency</a></li>
-                <li><a href="#">Jobs</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Trend</a></li>
-                <li><a href="#">Weather</a></li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://www.google.com/finance/quote/USD-AUD?sa=X&ved=2ahUKEwiXi8XLjOyGAxWzSWwGHfOHAjMQmY0JegQIBxAp">Currency</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://www.livehire.com/careers/cenitex">Jobs</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://news.google.com.au">News</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Search the web for the top IT skills that will be in demand for the year 2024.">Trend</a>
+                </li>
+                <li><a href="#" data-prompt="Find out the weather in Phuket.">Weather</a></li>
             </ul>
         </nav>
     </header>
@@ -51,7 +59,8 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                 <div class="chat-content">
                     <div class="chat-messages" id="chat-messages">
                         <p class="chat-header">Welcome to Ollama Chatbot</p>
-                        <p class="chat-subheader">Interact with our Multi AI Agent powered chatbot to get instant responses.</p>
+                        <p class="chat-subheader">Interact with our Multi AI Agent powered chatbot to get instant
+                            responses.</p>
                     </div>
                 </div>
             </div>
@@ -61,9 +70,9 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                         <div class="input-container">
                             <div class="reset-button-wrapper">
                                 <button id="reset-button" class="reset-button" type="reset">
-                                    <i class="fas fa-redo"></i>
+                                    <i class="fas fa-stop"></i>
+                                </button>
                             </div>
-                            </button>
                             <textarea id="chat-textarea" class="chat-input" placeholder="Send a message"
                                 rows="1"></textarea>
                             <div class="send-button-wrapper">
@@ -72,8 +81,8 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                                 </button>
                             </div>
                         </div>
+                    </form>
                 </div>
-                </form>
                 <div class="disclaimer">
                     LLMs can make mistakes. Check important info.
                 </div>
@@ -86,6 +95,7 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
         const resetButton = document.querySelector("#reset-button");
         const txtPrompt = document.querySelector("#chat-textarea");
         const btnSubmit = document.querySelector("#send-button");
+        const navLinks = document.querySelectorAll(".nav-menu a");
         let aborter = new AbortController();
         const md = markdownit({
             highlight: function (str, lang) {
@@ -100,18 +110,19 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
             }
         });
 
-        async function sendMessage(event) {
+        async function sendMessage(event, customPrompt = null) {
             event.preventDefault();
             let responseText = "";
             btnSubmit.classList.add('button--loading');
             btnSubmit.disabled = true;
             try {
+                const prompt = customPrompt || txtPrompt.value;
                 const response = await fetch("/ollama", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ question: txtPrompt.value }),
+                    body: JSON.stringify({ question: prompt }),
                     signal: aborter.signal
                 });
                 const reader = response.body.getReader();
@@ -161,6 +172,14 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
 
         document.querySelector("#input-form").addEventListener("submit", sendMessage);
         resetButton.addEventListener("click", resetChat);
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const prompt = link.getAttribute("data-prompt");
+                sendMessage(event, prompt);
+            });
+        });
     </script>
 </body>
 
