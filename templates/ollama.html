@@ -4,15 +4,7 @@ The following code provides a foundational HTML structure for a chatbot interfac
 
 Your task is to:
 
-- Improve my CSS code below that enhances this app to be visually stunning, modern, stylish, and professional while maintaining a traditional chatbot layout style. I would like a clean, minimalist style like Apple.com
-
-- Improve text styling on markdown AI chat response text message. Use text style like Apple.com.
-
-- Improve font as it still look like default arial
-
-- Fix an icon on AI chat response text message, as despite attempt, the icon still does not appear.
-
-- Ensure the design is responsive, providing a seamless experience across both desktop and mobile devices, and exudes an enterprise-level aesthetic.
+- Improve styling on h1, h2, h3, h4, p, a, ul, ol, pre, blockquote from my current css code below.
 
 You can generate a large, complex code block, but please take your time and think through each step carefully. Remember, your goal is to make the interface look as polished and professional as possible.
 Here is my HTML code that you can use when cross checking. Please output CSS code only.
@@ -89,10 +81,10 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
     </div>
     </div>
     <script type="module">
-        const btnSubmit = document.querySelector("#send-button");
-        const txtPrompt = document.querySelector("#chat-textarea");
         const chatMessages = document.querySelector("#chat-messages");
         const resetButton = document.querySelector("#reset-button");
+        const txtPrompt = document.querySelector("#chat-textarea");
+        const btnSubmit = document.querySelector("#send-button");
         let aborter = new AbortController();
         const md = markdownit({
             highlight: function (str, lang) {
