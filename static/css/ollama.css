@@ -1,15 +1,15 @@
 :root {
     --primary-color: #ffffff;
-    --secondary-color: #f8f9fa;
-    --accent-color: #007bff;
-    --text-color: #212529;
-    --text-secondary: #6c757d;
+    --secondary-color: #f5f5f7;
+    --accent-color: #0071e3;
+    --text-color: #1d1d1f;
+    --text-secondary: #86868b;
     --shadow-color: rgba(0, 0, 0, 0.1);
-    --border-radius: 0.375rem;
+    --border-radius: 12px;
     --transition-speed: 0.3s;
-    --font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --background-gradient: linear-gradient(135deg, #ffffff, #f8f9fa);
-    --heading-color: #212529;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --background-gradient: linear-gradient(135deg, #ffffff, #f5f5f7);
+    --heading-color: #1d1d1f;
 }
 
 * {
@@ -32,7 +32,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 2rem;
 }
 
 #header {
@@ -40,8 +40,9 @@ body {
     position: fixed;
     width: 100%;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     transition: background-color var(--transition-speed);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
 nav {
@@ -53,7 +54,7 @@ nav {
 
 .logo h7 {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .highlight {
@@ -61,10 +62,10 @@ nav {
 }
 
 .subheader {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     margin-top: 0.25rem;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .nav-menu {
@@ -79,7 +80,7 @@ nav {
 .nav-menu a {
     color: var(--text-color);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 400;
     transition: color var(--transition-speed);
     position: relative;
 }
@@ -141,7 +142,8 @@ nav {
     padding: 1rem;
 }
 
-h8, h9 {
+h8,
+h9 {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
@@ -192,6 +194,12 @@ h9 {
     border-radius: 30px;
     padding: 0.5rem;
     box-shadow: 0 2px 10px var(--shadow-color);
+    border: 1px solid var(--accent-color);
+    transition: box-shadow var(--transition-speed);
+}
+
+.input-container:focus-within {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
 }
 
 .chat-input {
@@ -205,7 +213,8 @@ h9 {
     outline: none;
 }
 
-.reset-button, .send-button {
+.reset-button,
+.send-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -215,7 +224,8 @@ h9 {
     padding: 0.5rem;
 }
 
-.reset-button:hover, .send-button:hover {
+.reset-button:hover,
+.send-button:hover {
     transform: scale(1.1);
 }
 
@@ -232,6 +242,20 @@ h9 {
     padding: 1rem;
     margin: 1rem 0;
     overflow-x: auto;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.hljs-rendered {
+    background-color: #f8f8f8;
+    border-left: 4px solid var(--accent-color);
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-color);
 }
 
 @media (max-width: 768px) {
@@ -271,26 +295,19 @@ h9 {
         flex-wrap: nowrap;
     }
 
-    .reset-button, .send-button {
+    .reset-button,
+    .send-button {
         padding: 0.25rem;
     }
 }
 
-/* Ensure hljs gets formatted for code syntax styling */
-.hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 0.5em;
-    background: #f0f0f0;
-    color: #444;
-}
-
+/* Syntax highlighting styles */
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-literal,
 .hljs-section,
 .hljs-link {
-    color: #005cc5;
+    color: #0070c9;
 }
 
 .hljs-function .hljs-keyword {
@@ -308,7 +325,7 @@ h9 {
 .hljs-variable,
 .hljs-template-tag,
 .hljs-template-variable {
-    color: #032f62;
+    color: #067d17;
 }
 
 .hljs-comment,
