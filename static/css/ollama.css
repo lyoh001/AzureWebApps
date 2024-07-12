@@ -393,6 +393,11 @@ blockquote {
         display: block;
     }
 
+    .chat-icon {
+        width: 30px;
+        height: 30px;
+    }
+
     h8 {
         font-size: 2rem;
         margin-top: 7rem;
