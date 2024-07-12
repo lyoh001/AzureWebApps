@@ -86,6 +86,7 @@
         return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
       }
     });
+
     async function sendMessage(event) {
       event.preventDefault();
       let responseText = "";
@@ -127,17 +128,19 @@
         btnSubmit.disabled = false;
       }
     }
+
     function resetChat() {
       chatMessages.innerHTML = `
-        <h2>Welcome to Ollama Chatbot</h2>
-        <p>Interact with our AI-powered chatbot to get instant responses.</p>
-      `;
+                <h2>Welcome to Ollama Chatbot</h2>
+                <p>Interact with our AI-powered chatbot to get instant responses.</p>
+            `;
       txtPrompt.value = "";
       aborter.abort();
       aborter = new AbortController();
       btnSubmit.classList.remove('button--loading');
       btnSubmit.disabled = false;
     }
+
     document.querySelector("#input-form").addEventListener("submit", sendMessage);
     resetButton.addEventListener("click", resetChat);
   </script>
