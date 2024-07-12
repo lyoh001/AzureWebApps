@@ -707,7 +707,7 @@ main {
 
 - Ensure the user input field is docked and remains fixed at the bottom of the screen, even when long messages are generated (i.e., it should not get pushed down with a page scroll).
 
-- h2 & h3 headings, "Welcome to Ollama Chatbot: Interact with our Multi AI Agent powered chatbot to get instant responses." should be displayed in the center of the screen with a stunning, catchy style. However, AI chat response text messages should be displayed as normal text and aligned to the left, not centered.
+- h8 & h9 headings, "Welcome to Ollama Chatbot: Interact with our Multi AI Agent powered chatbot to get instant responses." should be displayed in the center of the screen with a stunning, catchy style. However, AI chat response text messages should be displayed as normal text and aligned to the left, not centered.
 
 - chat message display pane should be blended with background with no shadow. (I would like a clean, minimalist style like Apple.com)
 
@@ -728,149 +728,149 @@ Here is my HTML code:
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="../static/css/ollama.css">
-  <link rel="icon" href="../static/icons/ollama.png">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-  <script src="../static/js/markdown-it.min.js"></script>
-  <title>Ollama Chatbot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="../static/css/ollama.css">
+    <link rel="icon" href="../static/icons/ollama.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="../static/js/markdown-it.min.js"></script>
+    <title>Ollama Chatbot</title>
 </head>
 
 <body>
-  <header id="header">
-    <nav class="container">
-      <div class="logo">
-        <h1><span class="highlight">Ollama</span> Chatbot</h1>
-        <p class="subheader">Modern Chatbot User Interface</p>
-      </div>
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <ul class="nav-menu">
-        <li><a href="#">Currency</a></li>
-        <li><a href="#">Jobs</a></li>
-        <li><a href="#">News</a></li>
-        <li><a href="#">Trend</a></li>
-        <li><a href="#">Weather</a></li>
-      </ul>
-    </nav>
-  </header>
-  <div class="app">
-    <div class="main-content">
-      <div class="content-wrapper">
-        <div class="chat-content">
-          <div class="chat-messages" id="chat-messages">
-            <h2>​</h2>
-            <h2>​</h2>
-            <h2>Welcome to Ollama Chatbot</h2>
-            <h3>Interact with our Multi AI Agent powered chatbot to get instant responses.</h3>
-          </div>
-        </div>
-      </div>
-      <div class="input-area">
-        <div class="input-wrapper">
-          <form class="input-form" id="input-form">
-            <div class="input-container">
-              <div class="reset-button-wrapper">
-                <button id="reset-button" class="reset-button" type="reset">
-                  <i class="fas fa-redo"></i>
-              </div>
-              </button>
-              <textarea id="chat-textarea" class="chat-input" placeholder="Send a message" rows="1"></textarea>
-              <div class="send-button-wrapper">
-                <button id="send-button" class="send-button" type="submit">
-                  <i class="fas fa-paper-plane"></i>
-                </button>
-              </div>
+    <header id="header">
+        <nav class="container">
+            <div class="logo">
+                <h7><span class="highlight">Ollama</span> Chatbot</h7>
+                <p class="subheader">Modern Chatbot User Interface</p>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#">Currency</a></li>
+                <li><a href="#">Jobs</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Trend</a></li>
+                <li><a href="#">Weather</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="app">
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div class="chat-content">
+                    <div class="chat-messages" id="chat-messages">
+                        <br>
+                        <h8>Welcome to Ollama Chatbot</h8>
+                        <h9>Interact with our Multi AI Agent powered chatbot to get instant responses.</h9>
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <form class="input-form" id="input-form">
+                        <div class="input-container">
+                            <div class="reset-button-wrapper">
+                                <button id="reset-button" class="reset-button" type="reset">
+                                    <i class="fas fa-redo"></i>
+                            </div>
+                            </button>
+                            <textarea id="chat-textarea" class="chat-input" placeholder="Send a message"
+                                rows="1"></textarea>
+                            <div class="send-button-wrapper">
+                                <button id="send-button" class="send-button" type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                </div>
+                </form>
+                <div class="disclaimer">
+                    LLMs can make mistakes. Check important info.
+                </div>
             </div>
         </div>
-        </form>
-        <div class="disclaimer">
-          LLMs can make mistakes. Check important info.
-        </div>
-      </div>
     </div>
-  </div>
-  </div>
-  <script type="module">
-    const btnSubmit = document.querySelector("#send-button");
-    const txtPrompt = document.querySelector("#chat-textarea");
-    const chatMessages = document.querySelector("#chat-messages");
-    const resetButton = document.querySelector("#reset-button");
-    let aborter = new AbortController();
-    const md = markdownit({
-      highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          try {
-            return '<pre class="hljs"><code>' +
-              hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-              '</code></pre>';
-          } catch (__) { }
-        }
-        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
-      }
-    });
-
-    async function sendMessage(event) {
-      event.preventDefault();
-      let responseText = "";
-      btnSubmit.classList.add('button--loading');
-      btnSubmit.disabled = true;
-      try {
-        const response = await fetch("/ollama", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ question: txtPrompt.value }),
-          signal: aborter.signal
+    </div>
+    <script type="module">
+        const btnSubmit = document.querySelector("#send-button");
+        const txtPrompt = document.querySelector("#chat-textarea");
+        const chatMessages = document.querySelector("#chat-messages");
+        const resetButton = document.querySelector("#reset-button");
+        let aborter = new AbortController();
+        const md = markdownit({
+            highlight: function (str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre class="hljs"><code>' +
+                            hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+                            '</code></pre>';
+                    } catch (__) { }
+                }
+                return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+            }
         });
-        const reader = response.body.getReader();
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
+
+        async function sendMessage(event) {
+            event.preventDefault();
+            let responseText = "";
+            btnSubmit.classList.add('button--loading');
+            btnSubmit.disabled = true;
+            try {
+                const response = await fetch("/ollama", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ question: txtPrompt.value }),
+                    signal: aborter.signal
+                });
+                const reader = response.body.getReader();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) {
+                        txtPrompt.value = "";
+                        hljs.highlightAll();
+                        btnSubmit.classList.remove('button--loading');
+                        btnSubmit.disabled = false;
+                        return;
+                    }
+                    const decodedValue = new TextDecoder().decode(value);
+                    console.log(decodedValue);
+                    responseText += decodedValue;
+                    chatMessages.innerHTML = md.render(responseText);
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log("✋", "Fetch request aborted");
+                    txtPrompt.value = "";
+                    aborter = new AbortController();
+                } else {
+                    console.log("😡", error);
+                }
+                btnSubmit.classList.remove('button--loading');
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function resetChat() {
+            chatMessages.innerHTML = `
+                <h8>Welcome to Ollama Chatbot</h8>
+                <h9>Interact with our Multi AI Agent powered chatbot to get instant responses.</h9>
+            `;
             txtPrompt.value = "";
-            hljs.highlightAll();
+            aborter.abort();
+            aborter = new AbortController();
             btnSubmit.classList.remove('button--loading');
             btnSubmit.disabled = false;
-            return;
-          }
-          const decodedValue = new TextDecoder().decode(value);
-          console.log(decodedValue);
-          responseText += decodedValue;
-          chatMessages.innerHTML = md.render(responseText);
         }
-      } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log("✋", "Fetch request aborted");
-          txtPrompt.value = "";
-          aborter = new AbortController();
-        } else {
-          console.log("😡", error);
-        }
-        btnSubmit.classList.remove('button--loading');
-        btnSubmit.disabled = false;
-      }
-    }
 
-    function resetChat() {
-      chatMessages.innerHTML = `
-                <h2>Welcome to Ollama Chatbot</h2>
-                <h3>Interact with our Multi AI Agent powered chatbot to get instant responses.</h3>
-            `;
-      txtPrompt.value = "";
-      aborter.abort();
-      aborter = new AbortController();
-      btnSubmit.classList.remove('button--loading');
-      btnSubmit.disabled = false;
-    }
-
-    document.querySelector("#input-form").addEventListener("submit", sendMessage);
-    resetButton.addEventListener("click", resetChat);
-  </script>
+        document.querySelector("#input-form").addEventListener("submit", sendMessage);
+        resetButton.addEventListener("click", resetChat);
+    </script>
 </body>
 
 </html>
