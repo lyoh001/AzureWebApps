@@ -143,6 +143,22 @@ nav {
     min-height: calc(100vh - 200px);
     line-height: 1.8;
     padding: 1rem;
+    position: relative;
+    padding-top: 60px;
+}
+
+.chat-messages::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-image: url('../icons/ollama.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 h8,
