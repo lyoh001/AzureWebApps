@@ -415,18 +415,45 @@ blockquote {
         background-color: var(--secondary-color);
         padding: 2rem;
         box-shadow: 0 10px 20px var(--shadow-color);
+        transition: transform var(--transition-speed), opacity var(--transition-speed);
+        transform: translateY(-10px);
+        opacity: 0;
     }
 
     .nav-menu.active {
         display: flex;
+        transform: translateY(0);
+        opacity: 1;
     }
 
     .nav-menu li {
-        margin: 1rem 1.5rem;
+        margin: 1rem 0;
     }
 
     .nav-toggle {
         display: block;
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        transition: color var(--transition-speed);
+    }
+
+    .nav-toggle:hover {
+        color: var(--accent-color);
+    }
+
+    .nav-toggle .fa-times {
+        display: none;
+    }
+
+    .nav-toggle.active .fa-bars {
+        display: none;
+    }
+
+    .nav-toggle.active .fa-times {
+        display: inline-block;
     }
 
     .content-wrapper {

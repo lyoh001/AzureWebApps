@@ -4,7 +4,8 @@ The following code provides a foundational HTML structure for a chatbot interfac
 
 Your task is to:
 
-- My CSS code below.
+- remove active nav menu when the user clicks somewhere on mob view. My CSS code below.
+
 
 
 You can generate a large, complex code block, but please take your time and think through each step carefully. Remember, your goal is to make the interface look as polished and professional as possible.
@@ -180,6 +181,23 @@ Here is my HTML code that you can use when cross checking. Please output CSS cod
                 sendMessage(event, prompt);
             });
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                navToggle.classList.toggle('active');
+
+                if (navToggle.classList.contains('active')) {
+                    navToggle.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    navToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
     </script>
 </body>
 
