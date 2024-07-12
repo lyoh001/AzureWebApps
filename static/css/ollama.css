@@ -517,8 +517,4 @@ blockquote {
         font-size: 1rem;
         padding: 0.25rem;
     }
-
-    .hljs {
-        max-width: 40%;
-    }
 }
