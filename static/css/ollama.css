@@ -162,17 +162,28 @@ nav {
 .chat-header {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--heading-color);
+    color: var(--text-color);
     margin-bottom: 1rem;
     margin-top: 11rem;
-    background: linear-gradient(45deg, var(--accent-color), #6610f2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .chat-subheader {
     font-size: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.chat-start {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 50%;
+    max-width: 200px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 h1 {
