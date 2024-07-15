@@ -353,8 +353,6 @@ blockquote {
 .hljs {
     background: #f8f8f8;
     border-radius: var(--border-radius);
-    padding: 1rem;
-    margin: 1rem 0;
     overflow-x: auto;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     font-size: 0.8rem;
