@@ -49,8 +49,9 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 origins = [
-    "https://lyoh001.com",
+    "http://127.0.0.1:8000",
     "http://localhost:8000",
+    "https://lyoh001.com"
 ]
 app.add_middleware(
     CORSMiddleware,
