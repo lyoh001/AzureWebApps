@@ -354,7 +354,6 @@ blockquote {
     background: #f8f8f8;
     border-radius: var(--border-radius);
     overflow-x: auto;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     font-size: 0.8rem;
     line-height: 1.5;
     white-space: pre-wrap;
