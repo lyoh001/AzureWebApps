@@ -429,10 +429,10 @@ blockquote {
         flex-direction: column;
         position: absolute;
         top: 50px;
-        left: 0;
+        left: -25px;
         width: 100%;
         background-color: var(--primary-color);
-        padding: 2rem;
+        padding: 1rem 3.5rem;
         transition: transform var(--transition-speed), opacity var(--transition-speed);
         transform: translateY(-10px);
         opacity: 0;

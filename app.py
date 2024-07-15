@@ -37,6 +37,7 @@ from langchain_core.agents import AgentFinish
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import AzureChatOpenAI
 from langgraph.prebuilt.tool_executor import ToolExecutor
+from openai import AzureOpenAI
 from pydantic import BaseModel
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfbase import pdfmetrics
@@ -48,11 +49,7 @@ load_dotenv(find_dotenv())
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-origins = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-    "https://lyoh001.com"
-]
+origins = ["http://127.0.0.1:8000", "http://localhost:8000", "https://lyoh001.com"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -525,6 +522,26 @@ async def post_ollama(request: QuestionRequest):
                 f"https://api.openweathermap.org/data/2.5/weather?q={'melbourne,au' if city.lower() in ['melbourne', 'city'] else city}&APPID={os.environ['WEATHER_API_KEY']}&units=metric"
             ).text,
             description="Useful for when you need to answer a question about the weather for a specific city.",
+        ),
+        Tool(
+            name="Dalle",
+            func=lambda prompt: "Here is a link to the image: "
+            + json.loads(
+                AzureOpenAI(
+                    api_key=os.environ["DALLE_API_KEY"],
+                    azure_endpoint=os.environ["DALLE_API_BASE"],
+                )
+                .images.generate(
+                    model="dall-e-3",
+                    prompt=prompt,
+                    n=1,
+                    size="1792x1024",
+                    style="natural",
+                    quality="hd",
+                )
+                .model_dump_json()
+            )["data"][0]["url"],
+            description="Useful for when you need to generate an image from a user prompt.",
         ),
     ]
     prompt = ChatPromptTemplate.from_messages(
