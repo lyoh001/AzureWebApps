@@ -35,6 +35,7 @@ from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.utilities.bing_search import BingSearchAPIWrapper
 from langchain_core.agents import AgentFinish
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI
 from langgraph.prebuilt.tool_executor import ToolExecutor
 from openai import AzureOpenAI
@@ -492,6 +493,10 @@ async def post_ollama(request: QuestionRequest):
         model=os.environ["OPENAI_MODEL_NAME"],
         temperature=0,
     )
+    llm = ChatGroq(
+        model="gemma2-9b-it",
+        temperature=0,
+    )
     tools = [
         Tool(
             name="Search",
@@ -602,7 +607,7 @@ async def post_ollama(request: QuestionRequest):
                 (
                     "human",
                     HUMAN_PREFIX
-                    + "Review the provided text and create a concise report in well-formated structure capturing the essential information, focusing on answering question. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview the content. Here is the gathered information, delimited by triple backticks. ```{input}```"
+                    + "Review the provided text and create a concise report in a well-formatted structure capturing the essential information, focusing on answering questions. Use clear and professional language, and organize the summary in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the summary is easy to understand and provides a comprehensive but succinct overview of the content. Additionally, whenever you encounter a URL in the text, convert it into a clickable hyperlink. Here is the gathered information, delimited by triple backticks. ```{input}```"
                     + HUMAN_SUFFIX,
                 ),
             ]

@@ -5,6 +5,7 @@ gunicorn
 jinja2
 langchain
 langchain-community
+langchain-groq
 langchain-openai
 langgraph
 numpy
