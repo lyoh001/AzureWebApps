@@ -1,72 +1,25 @@
-import calendar
-import datetime
-import io
-import json
-import os
-import re
-import shutil
-import tempfile
-import warnings
-from io import BytesIO
-from pickle import load
-
-import cv2
-import numpy as np
-import pandas as pd
-import requests
-import scipy.stats as stat
-import tflite_runtime.interpreter as tflite
-import uvicorn
-from dotenv import find_dotenv, load_dotenv
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import (
-    FileResponse,
-    HTMLResponse,
-    JSONResponse,
-    StreamingResponse,
-)
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from langchain.agents import Tool, create_json_chat_agent
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema import StrOutputParser
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_community.utilities.bing_search import BingSearchAPIWrapper
-from langchain_core.agents import AgentFinish
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_groq import ChatGroq
-from langchain_openai import AzureChatOpenAI
-from langgraph.prebuilt.tool_executor import ToolExecutor
-from openai import AzureOpenAI
-from pydantic import BaseModel
-from PyPDF2 import PdfReader, PdfWriter
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-
-warnings.filterwarnings("ignore")
-load_dotenv(find_dotenv())
-app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-origins = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-    "https://lyoh001.com",
+########################################################################
+DEBUG = False
+MODEL_ID = 2
+MODEL_SIZE = 0
+SAGEMAKER_MODEL = "meta-llama/Meta-Llama-3-8B-Instruct"
+GROQ_MODEL = ["gemma2-9b-it", "llama3-70b-8192"][MODEL_SIZE]
+GOOGLE_MODEL = ["gemini-1.5-flash", "gemini-1.5-pro"][MODEL_SIZE]
+GPT_MODEL = ["gpt-35-turbo-16k", "gpt-4o"][MODEL_SIZE]
+BEDROCK_MODEL = [
+    "anthropic.claude-3-haiku-20240307-v1:0",
+    "anthropic.claude-3-5-sonnet-20240620-v1:0",
+][MODEL_SIZE]
+########################################################################
+SYSTEM_PREFIX = ["", "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"][
+    MODEL_ID < 2
 ]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-)
-SYSTEM_PREFIX = ""
-SYSTEM_SUFFIX = ""
-HUMAN_PREFIX = ""
-HUMAN_SUFFIX = ""
+SYSTEM_SUFFIX = ["", "<|eot_id|><|start_header_id|>user<|end_header_id|>"][MODEL_ID < 2]
+HUMAN_PREFIX = ["", ""][MODEL_ID < 2]
+HUMAN_SUFFIX = ["", "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n"][
+    MODEL_ID < 2
+]
+########################################################################
 SYSTEM_MESSAGE = """Assistant is a large language model trained by OpenAI.
 
 Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
@@ -107,15 +60,94 @@ Use this format if you can answer the user's original question. The Markdown cod
 
 USER'S INPUT:
 Here is the user's input. Remember to respond with the markdown code snippet of JSON blob with a single action, and NOTHING else."""
+########################################################################
+import asyncio
+import calendar
+import datetime
+import io
+import json
+import os
+import re
+import shutil
+import tempfile
+import warnings
+from io import BytesIO
+from pickle import load
+
+import cv2
+import numpy as np
+import pandas as pd
+import requests
+import scipy.stats as stat
+import tflite_runtime.interpreter as tflite
+import uvicorn
+from dotenv import find_dotenv, load_dotenv
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import (FileResponse, HTMLResponse, JSONResponse,
+                               StreamingResponse)
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from langchain.agents import Tool, create_json_chat_agent
+from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.prompts import ChatPromptTemplate
+from langchain.schema import StrOutputParser
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.utilities.bing_search import BingSearchAPIWrapper
+from langchain_core.agents import AgentFinish
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_groq import ChatGroq
+from langchain_openai import AzureChatOpenAI
+from langgraph.prebuilt.tool_executor import ToolExecutor
+from openai import AzureOpenAI
+from pydantic import BaseModel
+from PyPDF2 import PdfReader, PdfWriter
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+
+warnings.filterwarnings("ignore")
+load_dotenv(find_dotenv())
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+origins = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "https://lyoh001.com",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 
 class QuestionRequest(BaseModel):
     question: str
 
 
-@app.get("/status")
-async def status():
-    return {"status": 200}
+def create_model(model_id):
+    if model_id == 2:
+        return ChatGroq(
+            model=GROQ_MODEL,
+            temperature=0.001,
+            streaming=True,
+            callbacks=[StreamingStdOutCallbackHandler()],
+        )
+
+    elif model_id == 4:
+        return AzureChatOpenAI(
+            azure_deployment=GPT_MODEL,
+            model=GPT_MODEL,
+            temperature=1,
+            streaming=True,
+            callbacks=[StreamingStdOutCallbackHandler()],
+        )
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -485,22 +517,14 @@ async def get_mlvmaudit(request: Request):
     return templates.TemplateResponse("mlvmaudit.html", {"request": request})
 
 
-@app.get("/ollama", response_class=HTMLResponse)
-async def get_ollama(request: Request):
-    return templates.TemplateResponse("ollama.html", {"request": request})
+@app.get("/llm", response_class=HTMLResponse)
+async def get_llm(request: Request):
+    return templates.TemplateResponse("llm.html", {"request": request})
 
 
-@app.post("/ollama")
-async def post_ollama(request: QuestionRequest):
-    llm = AzureChatOpenAI(
-        azure_deployment=os.environ["OPENAI_DEPLOYMENT_NAME"],
-        model=os.environ["OPENAI_MODEL_NAME"],
-        temperature=0,
-    )
-    llm = ChatGroq(
-        model="gemma2-9b-it",
-        temperature=0,
-    )
+@app.post("/llm")
+async def post_llm(request: QuestionRequest):
+    llm = create_model(MODEL_ID)
     tools = [
         Tool(
             name="Search",
@@ -577,12 +601,10 @@ async def post_ollama(request: QuestionRequest):
             }
         )
     except:
-        agent_action = {
-            "agent_outcome": AgentFinish(
-                return_values={"output": ""},
-                log="",
-            )
-        }
+        agent_action = AgentFinish(
+            return_values={"output": ""},
+            log="",
+        )
     print(
         f"Use Tools? {chr(27)+'[91m'+chr(27)+'[1m'+'No'+chr(27)+'[0m' if isinstance(agent_action, AgentFinish) else chr(27)+'[92m'+chr(27)+'[1m'+'Yes'+chr(27)+'[0m'}"
     )
@@ -632,11 +654,22 @@ async def post_ollama(request: QuestionRequest):
             )
         question = f"Question: {request.question}\nAnswer: {output}"
 
+    stream_it = AsyncIteratorCallbackHandler()
+    llm.callbacks = [stream_it]
     llm_chain = prompt | llm | StrOutputParser()
 
+    async def run_call():
+        await llm_chain.ainvoke({"input": question})
+
     async def token_stream():
-        async for chunk in llm_chain.astream({"input": question}):
-            yield chunk
+        task = asyncio.create_task(run_call())
+        async for token in stream_it.aiter():
+            yield token
+        await task
+
+    # async def token_stream():
+    #     async for chunk in llm_chain.astream({"input": question}):
+    #         yield chunk
 
     return StreamingResponse(token_stream(), media_type="text/event-stream")
 
@@ -669,12 +702,7 @@ async def post_mlwklsbrush(user_input: dict):
                 skill.split("]")[1] for skill in user_input["understandingSkills"]
             ),
         }
-
-        llm = AzureChatOpenAI(
-            azure_deployment=os.environ["OPENAI_DEPLOYMENT_NAME"],
-            model=os.environ["OPENAI_MODEL_NAME"],
-            temperature=1,
-        )
+        llm = create_model(4)
         prompt = ChatPromptTemplate.from_messages(
             [
                 (

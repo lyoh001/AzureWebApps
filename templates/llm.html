@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="../static/css/llm.css">
+    <link rel="icon" href="../static/icons/llm.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="../static/js/markdown-it.min.js"></script>
+    <title>LLM Chatbot</title>
+</head>
+
+<body>
+    <header id="header">
+        <nav class="container">
+            <div class="logo">
+                <p class="logo-header"><a href="https://lyoh001.com/llm"><span
+                            class="logo-highlight">LLM</span></a> Chatbot</p>
+                <p class="logo-subheader">Modern Chatbot User Interface</p>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#" data-prompt="Create a code snippet to build a FastAPI backend in Python.">Coding</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://www.google.com/finance/quote/USD-AUD?sa=X&ved=2ahUKEwiXi8XLjOyGAxWzSWwGHfOHAjMQmY0JegQIBxAp">Currency</a>
+                </li>
+                <li><a href="#" data-prompt="Generate an image of a tropical beach.">Image</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://www.livehire.com/careers/cenitex">Jobs</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Use Webscraper to retrieve the content from the url. https://news.google.com.au">News</a>
+                </li>
+                <li><a href="#"
+                        data-prompt="Search the web for the top IT skills that will be in demand for the year 2024.">
+                        Skills</a>
+                </li>
+                <li><a href="#" data-prompt="Find out the weather in Phuket.">Weather</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="app">
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div class="chat-content">
+                    <div class="chat-messages" id="chat-messages">
+                        <p class="chat-header">Welcome to LLM Chatbot!</p>
+                        <p class="chat-subheader">Smart chats, instant answers.
+                            Powered by multi-AI Agents.</p>
+                        <p class="chat-start">Let's Begin</p>
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <form class="input-form" id="input-form">
+                        <div class="input-container">
+                            <div class="reset-button-wrapper">
+                                <button id="reset-button" class="reset-button" type="reset">
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                            </div>
+                            <textarea id="chat-textarea" class="chat-input" placeholder="Send a message"
+                                rows="1"></textarea>
+                            <div class="send-button-wrapper">
+                                <button id="send-button" class="send-button" type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="disclaimer">
+                    LLMs can make mistakes. Check important info.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        const chatMessages = document.querySelector("#chat-messages");
+        const resetButton = document.querySelector("#reset-button");
+        const txtPrompt = document.querySelector("#chat-textarea");
+        const btnSubmit = document.querySelector("#send-button");
+        const navLinks = document.querySelectorAll(".nav-menu a");
+        let aborter = new AbortController();
+        const md = markdownit({
+            highlight: function (str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre class="hljs"><code>' +
+                            hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+                            '</code></pre>';
+                    } catch (__) { }
+                }
+                return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+            }
+        });
+
+        async function sendMessage(event, customPrompt = null) {
+            event.preventDefault();
+            let responseText = "";
+            btnSubmit.classList.add('button--loading');
+            btnSubmit.disabled = true;
+            try {
+                const prompt = customPrompt || txtPrompt.value;
+                const response = await fetch("/llm", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ question: prompt }),
+                    signal: aborter.signal
+                });
+                const reader = response.body.getReader();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) {
+                        txtPrompt.value = "";
+                        hljs.highlightAll();
+                        btnSubmit.classList.remove('button--loading');
+                        btnSubmit.disabled = false;
+                        return;
+                    }
+                    const decodedValue = new TextDecoder().decode(value);
+                    console.log(decodedValue);
+                    responseText += decodedValue;
+                    chatMessages.innerHTML = `
+                        <div class="chat-messages">
+                            <img src="../static/icons/llm.png" alt="LLM Icon" class="chat-icon">
+                            <div class="chat-text">${md.render(responseText)}</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log("✋", "Fetch request aborted");
+                    txtPrompt.value = "";
+                    aborter = new AbortController();
+                } else {
+                    console.log("😡", error);
+                }
+                btnSubmit.classList.remove('button--loading');
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function resetChat() {
+            aborter.abort();
+            btnSubmit.classList.remove('button--loading');
+            btnSubmit.disabled = false;
+        }
+
+        document.querySelector("#input-form").addEventListener("submit", sendMessage);
+        resetButton.addEventListener("click", resetChat);
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const prompt = link.getAttribute("data-prompt");
+                sendMessage(event, prompt);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            const body = document.body;
+            const overlay = document.createElement('div');
+            overlay.classList.add('nav-overlay');
+            body.appendChild(overlay);
+            function closeMenu() {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+                overlay.classList.remove('active');
+                navToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+            function openMenu() {
+                navMenu.classList.add('active');
+                navToggle.classList.add('active');
+                overlay.classList.add('active');
+                navToggle.innerHTML = '<i class="fas fa-times"></i>';
+            }
+
+            navToggle.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            overlay.addEventListener('click', closeMenu);
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
