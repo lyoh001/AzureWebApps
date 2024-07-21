@@ -84,8 +84,12 @@ import uvicorn
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import (FileResponse, HTMLResponse, JSONResponse,
-                               StreamingResponse)
+from fastapi.responses import (
+    FileResponse,
+    HTMLResponse,
+    JSONResponse,
+    StreamingResponse,
+)
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from langchain.agents import Tool, create_json_chat_agent
@@ -658,18 +662,15 @@ async def post_llm(request: QuestionRequest):
     llm.callbacks = [stream_it]
     llm_chain = prompt | llm | StrOutputParser()
 
-    async def run_call():
-        await llm_chain.ainvoke({"input": question})
-
-    async def token_stream():
-        task = asyncio.create_task(run_call())
-        async for token in stream_it.aiter():
-            yield token
-        await task
-
     # async def token_stream():
     #     async for chunk in llm_chain.astream({"input": question}):
     #         yield chunk
+
+    async def token_stream():
+        task = asyncio.create_task(llm_chain.ainvoke({"input": question}))
+        async for token in stream_it.aiter():
+            yield token
+        await task
 
     return StreamingResponse(token_stream(), media_type="text/event-stream")
 
