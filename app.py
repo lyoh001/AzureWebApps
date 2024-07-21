@@ -663,8 +663,8 @@ async def post_llm(request: QuestionRequest):
     llm_chain = prompt | llm | StrOutputParser()
 
     # async def token_stream():
-    #     async for chunk in llm_chain.astream({"input": question}):
-    #         yield chunk
+    #     async for token in llm_chain.astream({"input": question}):
+    #         yield token
 
     async def token_stream():
         task = asyncio.create_task(llm_chain.ainvoke({"input": question}))
