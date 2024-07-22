@@ -612,7 +612,7 @@ async def post_llm(request: QuestionRequest):
         agent_action = await asyncio.to_thread(
             agent_runnable.invoke,
             {
-                "input": request.question,
+                "input": question,
                 "chat_history": [],
                 "agent_outcome": None,
                 "intermediate_steps": [],
@@ -677,7 +677,7 @@ async def post_llm(request: QuestionRequest):
         )
         print(DASH_LINE)
         print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}")
-        question = f"Question: {request.question}\nAnswer: {output}"
+        question = f"Question: {question}\nAnswer: {output}"
 
     print(DASH_LINE)
     print(f"{chr(27)+'[96m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
