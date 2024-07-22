@@ -596,13 +596,14 @@ async def post_llm(request: QuestionRequest):
         llm, tools, prompt, stop_sequence=True, template_tool_response="{observation}"
     )
     try:
-        agent_action = agent_runnable.invoke(
+        agent_action = await asyncio.to_thread(
+            agent_runnable.invoke,
             {
                 "input": request.question,
                 "chat_history": [],
                 "agent_outcome": None,
                 "intermediate_steps": [],
-            }
+            },
         )
     except:
         agent_action = AgentFinish(
@@ -646,7 +647,7 @@ async def post_llm(request: QuestionRequest):
             print(
                 f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
             )
-            output = ToolExecutor(tools).invoke(agent_action)
+            output = await asyncio.to_thread(ToolExecutor(tools).invoke, agent_action)
             print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
         except:
             print(
