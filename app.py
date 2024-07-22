@@ -139,7 +139,7 @@ def create_model(model_id):
     if model_id == 2:
         return ChatGroq(
             model=GROQ_MODEL,
-            temperature=0.001,
+            temperature=TEMPERATURE,
             streaming=True,
             callbacks=[StreamingStdOutCallbackHandler()],
         )
@@ -152,6 +152,11 @@ def create_model(model_id):
             streaming=True,
             callbacks=[StreamingStdOutCallbackHandler()],
         )
+
+
+DASH_LINE = "-" * 50
+ID = "john.lee"
+TEMPERATURE = 0.001
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -528,6 +533,8 @@ async def get_llm(request: Request):
 
 @app.post("/llm")
 async def post_llm(request: QuestionRequest):
+    index, question = "*", request.question
+    original_question = request.question
     llm = create_model(MODEL_ID)
     tools = [
         Tool(
@@ -595,6 +602,12 @@ async def post_llm(request: QuestionRequest):
     agent_runnable = create_json_chat_agent(
         llm, tools, prompt, stop_sequence=True, template_tool_response="{observation}"
     )
+    print(DASH_LINE)
+    print(f"{chr(27)+'[95m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
+    print(f"{prompt.messages[0].prompt.template}\n{prompt.messages[2].prompt.template}")
+    print(DASH_LINE)
+    print(f"Running {chr(27)+'[95m'+chr(27)+'[1m'+'tools_agent'+chr(27)+'[0m'}")
+    print(DASH_LINE)
     try:
         agent_action = await asyncio.to_thread(
             agent_runnable.invoke,
@@ -605,7 +618,9 @@ async def post_llm(request: QuestionRequest):
                 "intermediate_steps": [],
             },
         )
+        print(f"\n{DASH_LINE}")
     except:
+        print(f"\n{DASH_LINE}")
         agent_action = AgentFinish(
             return_values={"output": ""},
             log="",
@@ -613,6 +628,7 @@ async def post_llm(request: QuestionRequest):
     print(
         f"Use Tools? {chr(27)+'[91m'+chr(27)+'[1m'+'No'+chr(27)+'[0m' if isinstance(agent_action, AgentFinish) else chr(27)+'[92m'+chr(27)+'[1m'+'Yes'+chr(27)+'[0m'}"
     )
+    print(DASH_LINE)
     if isinstance(agent_action, AgentFinish):
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -625,8 +641,24 @@ async def post_llm(request: QuestionRequest):
                 ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
             ]
         )
-        question = request.question
+        print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}")
     else:
+        print(f"Executing Tools")
+        print(DASH_LINE)
+        try:
+            print(
+                f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
+            )
+            output = await asyncio.to_thread(ToolExecutor(tools).invoke, agent_action)
+            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+        except:
+            print(
+                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed.'+chr(27)+'[0m'}"
+            )
+            output = ""
+            print(
+                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Returning the empty output.'+chr(27)+'[0m'}"
+            )
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -643,21 +675,16 @@ async def post_llm(request: QuestionRequest):
                 ),
             ]
         )
-        try:
-            print(
-                f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
-            )
-            output = await asyncio.to_thread(ToolExecutor(tools).invoke, agent_action)
-            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
-        except:
-            print(
-                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed.'+chr(27)+'[0m'}"
-            )
-            output = ""
-            print(
-                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Returning the empty output.'+chr(27)+'[0m'}"
-            )
+        print(DASH_LINE)
+        print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}")
         question = f"Question: {request.question}\nAnswer: {output}"
+
+    print(DASH_LINE)
+    print(f"{chr(27)+'[96m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
+    print(f"{prompt.messages[0].prompt.template}\n{prompt.messages[1].prompt.template}")
+    print(DASH_LINE)
+    print(f"{chr(27)+'[93m'+chr(27)+'[1m'+question+chr(27)+'[0m'}")
+    print(DASH_LINE)
 
     stream_it = AsyncIteratorCallbackHandler()
     llm.callbacks = [stream_it]
