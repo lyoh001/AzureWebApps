@@ -534,7 +534,7 @@ async def get_llm(request: Request):
 @app.post("/llm")
 async def post_llm(request: QuestionRequest):
     index, question = "*", request.question
-    original_question = request.question
+    original_question = question
     llm = create_model(MODEL_ID)
     tools = [
         Tool(
