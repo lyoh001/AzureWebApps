@@ -650,14 +650,17 @@ async def post_llm(request: QuestionRequest):
                 f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
             )
             output = await asyncio.to_thread(ToolExecutor(tools).invoke, agent_action)
-            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+            if "not a valid tool" in output:
+                output = ""
+                print(
+                    f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed. Returning the empty output.'+chr(27)+'[0m'}"
+                )
+            else:
+                print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
         except:
-            print(
-                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed.'+chr(27)+'[0m'}"
-            )
             output = ""
             print(
-                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Returning the empty output.'+chr(27)+'[0m'}"
+                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed. Returning the empty output.'+chr(27)+'[0m'}"
             )
         prompt = ChatPromptTemplate.from_messages(
             [
