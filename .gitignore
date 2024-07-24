@@ -1,4 +1,5 @@
 **pycache**
+.env
 .funcignore
 .gitignore
 .venv
