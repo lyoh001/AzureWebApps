@@ -673,7 +673,7 @@ async def post_llm(request: QuestionRequest):
                 (
                     "human",
                     HUMAN_PREFIX
-                    + "Review the provided text and generate an answer in a well-formatted structure that captures the essential information, focusing on answering the provided question. Use clear and professional language, and organize the answer in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the answer is easy to understand and provides a comprehensive but succinct overview of the content. Additionally, whenever you encounter a URL in the text, convert it into a clickable hyperlink with a short link name. Here is the text, delimited by triple backticks. ```{input}```"
+                    + "Review the provided context and generate an answer in a well-formatted structure that captures the essential information, focusing on answering the provided question. Use clear and professional language, and organize the answer in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the answer is easy to understand and provides a comprehensive but succinct overview of the content. Additionally, whenever you encounter a URL in the text, convert it into a clickable hyperlink with a short link text. Here is the context, delimited by triple backticks. ```{input}```"
                     + HUMAN_SUFFIX,
                 ),
             ]
