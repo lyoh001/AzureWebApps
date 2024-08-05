@@ -4,12 +4,8 @@ MODEL_ID = 2
 MODEL_SIZE = 0
 SAGEMAKER_MODEL = "meta-llama/Meta-Llama-3-8B-Instruct"
 GROQ_MODEL = ["llama-3.1-8b-instant", "llama-3.1-70b-versatile"][MODEL_SIZE]
-GOOGLE_MODEL = ["gemini-1.5-flash", "gemini-1.5-pro"][MODEL_SIZE]
+GOOGLE_MODEL = ["gemini-1.5-flash", "gemini-1.5-pro-exp-0801"][MODEL_SIZE]
 GPT_MODEL = ["gpt-35-turbo-16k", "gpt-4o"][MODEL_SIZE]
-BEDROCK_MODEL = [
-    "anthropic.claude-3-haiku-20240307-v1:0",
-    "anthropic.claude-3-5-sonnet-20240620-v1:0",
-][MODEL_SIZE]
 ########################################################################
 SYSTEM_PREFIX = ["", "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"][
     MODEL_ID < 2
