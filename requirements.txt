@@ -7,7 +7,6 @@ langchain
 langchain-community
 langchain-groq
 langchain-openai
-langgraph
 numpy
 opencv-python-headless
 pandas

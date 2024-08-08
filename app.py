@@ -1,3 +1,4 @@
+# %%
 ########################################################################
 DEBUG = False
 MODEL_ID = 2
@@ -99,7 +100,6 @@ from langchain_core.agents import AgentFinish
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI
-from langgraph.prebuilt.tool_executor import ToolExecutor
 from openai import AzureOpenAI
 from pydantic import BaseModel
 from PyPDF2 import PdfReader, PdfWriter
@@ -624,7 +624,6 @@ async def post_llm(request: QuestionRequest):
     print(
         f"Use Tools? {chr(27)+'[91m'+chr(27)+'[1m'+'No'+chr(27)+'[0m' if isinstance(agent_action, AgentFinish) else chr(27)+'[92m'+chr(27)+'[1m'+'Yes'+chr(27)+'[0m'}"
     )
-    print(DASH_LINE)
     if isinstance(agent_action, AgentFinish):
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -637,46 +636,58 @@ async def post_llm(request: QuestionRequest):
                 ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
             ]
         )
+        print(DASH_LINE)
         print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}")
     else:
+        print(DASH_LINE)
         print(f"Executing Tools")
         print(DASH_LINE)
         try:
             print(
                 f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
             )
-            output = await asyncio.to_thread(ToolExecutor(tools).invoke, agent_action)
-            if "not a valid tool" in output:
-                output = ""
-                print(
-                    f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed. Returning the empty output.'+chr(27)+'[0m'}"
-                )
-            else:
-                print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+            tool = [tool for tool in tools if tool.name == agent_action.tool][0]
+            output = await asyncio.to_thread(tool.invoke, agent_action.tool_input)
+            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        SYSTEM_PREFIX
+                        + f"You are a senior analyst with a knack for extracting meaningful insights from diverse data sets, regardless of the subject matter. Today, {datetime.date.today().strftime('%Y/%m/%d')}, your goal is to analyze gathered information to identify key facts and insights within a given context."
+                        + SYSTEM_SUFFIX,
+                    ),
+                    (
+                        "human",
+                        HUMAN_PREFIX
+                        + "Review the provided context and generate an answer in a well-formatted structure that captures the essential information, focusing on answering the provided question. Use clear and professional language, and organize the answer in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the answer is easy to understand and provides a comprehensive but succinct overview of the content. Additionally, whenever you encounter a URL in the text, convert it into a clickable hyperlink with a short link text. Here is the context, delimited by triple backticks. ```{input}```"
+                        + HUMAN_SUFFIX,
+                    ),
+                ]
+            )
+            print(DASH_LINE)
+            print(
+                f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}"
+            )
+            question = f"Question: {question}\nAnswer: {output}"
         except:
             output = ""
-            print(
-                f"\n{chr(27)+'[91m'+chr(27)+'[1m'+'Exception: Tools failed. Returning the empty output.'+chr(27)+'[0m'}"
+            print(f"{chr(27)+'[91m'+chr(27)+'[1m'+'Tools failed.'+chr(27)+'[0m'}")
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        SYSTEM_PREFIX
+                        + "You are a helpful assistant. Always format your response."
+                        + SYSTEM_SUFFIX,
+                    ),
+                    ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
+                ]
             )
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    SYSTEM_PREFIX
-                    + f"You are a senior analyst with a knack for extracting meaningful insights from diverse data sets, regardless of the subject matter. Today, {datetime.date.today().strftime('%Y/%m/%d')}, your goal is to analyze gathered information to identify key facts and insights within a given context."
-                    + SYSTEM_SUFFIX,
-                ),
-                (
-                    "human",
-                    HUMAN_PREFIX
-                    + "Review the provided context and generate an answer in a well-formatted structure that captures the essential information, focusing on answering the provided question. Use clear and professional language, and organize the answer in a logical manner using appropriate formatting such as headings, subheadings, and bullet points. Ensure that the answer is easy to understand and provides a comprehensive but succinct overview of the content. Additionally, whenever you encounter a URL in the text, convert it into a clickable hyperlink with a short link text. Here is the context, delimited by triple backticks. ```{input}```"
-                    + HUMAN_SUFFIX,
-                ),
-            ]
-        )
-        print(DASH_LINE)
-        print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}")
-        question = f"Question: {question}\nAnswer: {output}"
+            print(DASH_LINE)
+            print(
+                f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}"
+            )
 
     print(DASH_LINE)
     print(f"{chr(27)+'[96m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
