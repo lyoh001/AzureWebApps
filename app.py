@@ -595,9 +595,6 @@ async def post_llm(request: QuestionRequest):
             MessagesPlaceholder("agent_scratchpad"),
         ]
     )
-    agent_runnable = create_json_chat_agent(
-        llm, tools, prompt, stop_sequence=True, template_tool_response="{observation}"
-    )
     print(DASH_LINE)
     print(f"{chr(27)+'[95m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
     print(f"{prompt.messages[0].prompt.template}\n{prompt.messages[2].prompt.template}")
@@ -606,7 +603,13 @@ async def post_llm(request: QuestionRequest):
     print(DASH_LINE)
     try:
         agent_action = await asyncio.to_thread(
-            agent_runnable.invoke,
+            create_json_chat_agent(
+                llm,
+                tools,
+                prompt,
+                stop_sequence=True,
+                template_tool_response="{observation}",
+            ).invoke,
             {
                 "input": question,
                 "chat_history": [],
@@ -614,13 +617,12 @@ async def post_llm(request: QuestionRequest):
                 "intermediate_steps": [],
             },
         )
-        print(f"\n{DASH_LINE}")
     except:
-        print(f"\n{DASH_LINE}")
         agent_action = AgentFinish(
             return_values={"output": ""},
             log="",
         )
+    print(f"\n{DASH_LINE}")
     print(
         f"Use Tools? {chr(27)+'[91m'+chr(27)+'[1m'+'No'+chr(27)+'[0m' if isinstance(agent_action, AgentFinish) else chr(27)+'[92m'+chr(27)+'[1m'+'Yes'+chr(27)+'[0m'}"
     )
@@ -643,12 +645,9 @@ async def post_llm(request: QuestionRequest):
         print(f"Executing Tools")
         print(DASH_LINE)
         try:
-            print(
-                f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
-            )
             tool = [tool for tool in tools if tool.name == agent_action.tool][0]
             output = await asyncio.to_thread(tool.invoke, agent_action.tool_input)
-            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
+            question = f"Question: {question}\nAnswer: {output}"
             prompt = ChatPromptTemplate.from_messages(
                 [
                     (
@@ -665,14 +664,15 @@ async def post_llm(request: QuestionRequest):
                     ),
                 ]
             )
+            print(
+                f"{chr(27)+'[95m'+chr(27)+'[1m'+'action: '+str(agent_action.tool)+chr(27)+'[0m'}\n{chr(27)+'[95m'+chr(27)+'[1m'+'action_input: '+str(agent_action.tool_input)+chr(27)+'[0m'}"
+            )
+            print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
             print(DASH_LINE)
             print(
                 f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}"
             )
-            question = f"Question: {question}\nAnswer: {output}"
         except:
-            output = ""
-            print(f"{chr(27)+'[91m'+chr(27)+'[1m'+'Tools failed.'+chr(27)+'[0m'}")
             prompt = ChatPromptTemplate.from_messages(
                 [
                     (
@@ -684,6 +684,7 @@ async def post_llm(request: QuestionRequest):
                     ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
                 ]
             )
+            print(f"{chr(27)+'[91m'+chr(27)+'[1m'+'Tools failed.'+chr(27)+'[0m'}")
             print(DASH_LINE)
             print(
                 f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}"
