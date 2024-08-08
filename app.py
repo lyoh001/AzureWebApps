@@ -639,7 +639,7 @@ async def post_llm(request: QuestionRequest):
             ]
         )
         print(DASH_LINE)
-        print(f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}")
+        print(f"Running {chr(27)+'[91m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}")
     else:
         print(DASH_LINE)
         print(f"Executing Tools")
@@ -670,7 +670,7 @@ async def post_llm(request: QuestionRequest):
             print(f"{chr(27)+'[93m'+chr(27)+'[1m'+str(output)+chr(27)+'[0m'}")
             print(DASH_LINE)
             print(
-                f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}"
+                f"Running {chr(27)+'[92m'+chr(27)+'[1m'+'analyst_agent'+chr(27)+'[0m'}"
             )
         except:
             prompt = ChatPromptTemplate.from_messages(
@@ -688,11 +688,13 @@ async def post_llm(request: QuestionRequest):
             print(f"{chr(27)+'[91m'+chr(27)+'[1m'+'Tools failed.'+chr(27)+'[0m'}")
             print(DASH_LINE)
             print(
-                f"Running {chr(27)+'[96m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}"
+                f"Running {chr(27)+'[91m'+chr(27)+'[1m'+'assistant_agent'+chr(27)+'[0m'}"
             )
 
     print(DASH_LINE)
-    print(f"{chr(27)+'[96m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}")
+    print(
+        f"{chr(27)+'[92m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m' if 'analyst' in prompt.messages[0].prompt.template else chr(27)+'[91m'+chr(27)+'[1m'+'System Prompt'+chr(27)+'[0m'}"
+    )
     print(f"{prompt.messages[0].prompt.template}\n{prompt.messages[1].prompt.template}")
     print(DASH_LINE)
     print(f"{chr(27)+'[93m'+chr(27)+'[1m'+question+chr(27)+'[0m'}")
