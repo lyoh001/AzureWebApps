@@ -684,6 +684,7 @@ async def post_llm(request: QuestionRequest):
                     ("human", HUMAN_PREFIX + "{input}" + HUMAN_SUFFIX),
                 ]
             )
+            print(f"\n{DASH_LINE}")
             print(f"{chr(27)+'[91m'+chr(27)+'[1m'+'Tools failed.'+chr(27)+'[0m'}")
             print(DASH_LINE)
             print(
